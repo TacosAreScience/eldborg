@@ -12,184 +12,249 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
-:root{--bg-primary:#1c1c1a;--bg-secondary:#242422;--bg-tertiary:#111110;--text-primary:#f0ede6;--text-secondary:#a8a59e;--text-tertiary:#6e6d68;--border-light:rgba(255,255,255,.08);--border-mid:rgba(255,255,255,.16);--radius-md:8px;--radius-lg:12px;--success-bg:rgba(59,109,17,.2);--success-border:rgba(96,172,29,.4);--success-text:#97c459;}
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;background:#111110;color:var(--text-primary);min-height:100vh;padding-bottom:env(safe-area-inset-bottom,16px);color-scheme:dark;}
-#app{max-width:680px;margin:0 auto;padding:16px 16px 40px;}
-.header{background:linear-gradient(135deg,#042C53 0%,#0F6E56 50%,#185FA5 100%);padding:1.25rem 1.5rem;border-radius:var(--radius-lg);margin-bottom:1.25rem;}
-.header-eyebrow{font-size:10px;font-weight:500;color:#5DCAA5;text-transform:uppercase;letter-spacing:.12em;margin-bottom:4px;}
-.header-title{font-size:28px;font-weight:600;color:#E6F1FB;margin-bottom:2px;}
-.header-tagline{font-size:13px;color:#85B7EB;margin-bottom:14px;}
-.header-stats{display:flex;gap:8px;flex-wrap:wrap;}
-.header-stat{background:rgba(255,255,255,.11);border:.5px solid rgba(255,255,255,.18);border-radius:var(--radius-md);padding:7px 12px;text-align:center;flex:1;min-width:60px;}
-.header-stat .val{font-size:18px;font-weight:600;color:#9FE1CB;line-height:1.2;}
-.header-stat .lbl{font-size:10px;color:#85B7EB;text-transform:uppercase;letter-spacing:.05em;}
-.icelandic-word{background:var(--bg-primary);border:.5px solid rgba(127,119,221,.3);border-radius:var(--radius-lg);padding:10px 14px;margin-bottom:1.25rem;display:flex;align-items:center;gap:12px;}
-.word-icon{font-size:20px;color:#7F77DD;flex-shrink:0;}
-.word-title{font-size:17px;font-weight:600;color:#AFA9EC;}
-.word-meaning{font-size:12px;color:var(--text-secondary);margin-top:2px;line-height:1.4;}
+:root {
+  --bg-primary: #1c1c1a;
+  --bg-secondary: #242422;
+  --bg-tertiary: #111110;
+  --text-primary: #f0ede6;
+  --text-secondary: #a8a59e;
+  --text-tertiary: #6e6d68;
+  --border-light: rgba(255,255,255,.08);
+  --border-mid: rgba(255,255,255,.16);
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --success-bg: rgba(59,109,17,.22);
+  --success-border: rgba(96,172,29,.4);
+  --success-text: #97c459;
+  --accent: #185FA5;
+  --accent-light: #85B7EB;
+  --green: #1D9E75;
+  --green-light: #9FE1CB;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html { font-size: 16px; color-scheme: dark; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  padding-bottom: env(safe-area-inset-bottom, 16px);
+}
+#app { max-width: 680px; margin: 0 auto; padding: 16px 16px 40px; }
 
-.streak-row{display:flex;gap:8px;margin-bottom:1.25rem;}
-.streak-card{flex:1;background:var(--bg-primary);border:.5px solid var(--border-light);border-radius:var(--radius-lg);padding:12px 8px;text-align:center;}
-.streak-val{font-size:26px;font-weight:600;line-height:1.1;}
-.sv-fire{color:#D85A30;}.sv-ice{color:#185FA5;}.sv-aurora{color:#AFA9EC;}
-.streak-lbl{font-size:10px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.05em;margin-top:3px;}
-.section-label{font-size:10px;font-weight:600;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;}
-.day-nav{display:flex;gap:5px;overflow-x:auto;padding-bottom:6px;margin-bottom:1.25rem;scrollbar-width:none;}
-.day-nav::-webkit-scrollbar{display:none;}
-.day-pill{flex-shrink:0;width:42px;height:52px;border-radius:var(--radius-md);border:.5px solid var(--border-light);background:var(--bg-secondary);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;gap:1px;}
-.day-pill .dp-num{font-size:14px;font-weight:600;color:var(--text-primary);}
-.day-pill .dp-mon{font-size:9px;color:var(--text-tertiary);}
-.day-pill .dp-dot{width:4px;height:4px;border-radius:50%;background:var(--text-tertiary);opacity:.35;margin-top:1px;}
-.day-pill.active{background:#042C53;border-color:#185FA5;}
-.day-pill.active .dp-num,.day-pill.active .dp-mon{color:#85B7EB;}
-.day-pill.active .dp-dot{background:#85B7EB;opacity:.6;}
-.day-pill.complete{background:var(--success-bg);border-color:var(--success-border);}
-.day-pill.complete .dp-num{color:var(--success-text);}
-.day-pill.complete .dp-dot{background:var(--success-text);opacity:1;}
-.day-pill.weekend .dp-num{color:#D85A30;}
-.day-pill.active.weekend .dp-num{color:#F0997B;}
-.day-header{display:flex;align-items:center;gap:12px;margin-bottom:1rem;}
-.day-title{flex:1;}
-.day-title h2{font-size:18px;font-weight:600;}
-.day-title .day-date{font-size:12px;color:var(--text-secondary);margin-top:2px;}
-.weekend-badge{display:inline-block;font-size:10px;background:rgba(216,90,48,.22);color:#F0997B;border-radius:4px;padding:1px 6px;margin-left:6px;vertical-align:middle;font-weight:500;}
+/* Header */
+.header { background: linear-gradient(135deg, #042C53 0%, #0F6E56 50%, #185FA5 100%); padding: 1.25rem 1.5rem; border-radius: var(--radius-lg); margin-bottom: 1.25rem; }
+.header-eyebrow { font-size: 10px; font-weight: 500; color: #5DCAA5; text-transform: uppercase; letter-spacing: .12em; margin-bottom: 4px; }
+.header-title { font-size: 28px; font-weight: 600; color: #E6F1FB; margin-bottom: 2px; }
+.header-tagline { font-size: 13px; color: #85B7EB; margin-bottom: 14px; }
+.header-stats { display: flex; gap: 8px; flex-wrap: wrap; }
+.header-stat { background: rgba(255,255,255,.11); border: .5px solid rgba(255,255,255,.18); border-radius: var(--radius-md); padding: 7px 12px; text-align: center; flex: 1; min-width: 60px; }
+.header-stat .val { font-size: 18px; font-weight: 600; color: #9FE1CB; line-height: 1.2; }
+.header-stat .lbl { font-size: 10px; color: #85B7EB; text-transform: uppercase; letter-spacing: .05em; }
 
-.ring-wrap{position:relative;width:60px;height:60px;flex-shrink:0;}
-.ring-wrap svg{transform:rotate(-90deg);display:block;}
-.ring-text{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;}
-.countdown-banner{background:linear-gradient(135deg,#042C53,#085041);border-radius:var(--radius-lg);padding:14px 16px;margin-bottom:1rem;display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap;}
-.countdown-num{font-size:40px;font-weight:600;color:#9FE1CB;line-height:1;}
-.countdown-label{font-size:13px;color:#5DCAA5;margin-top:2px;}
-.countdown-sub{font-size:11px;color:#85B7EB;margin-top:3px;}
-.trip-chips{flex:1;min-width:160px;}
-.trip-chips-label{font-size:10px;color:#5DCAA5;text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px;font-weight:500;}
-.trip-chip{display:inline-flex;align-items:center;gap:4px;font-size:11px;background:rgba(239,159,39,.2);color:#FAC775;border-radius:99px;padding:3px 9px;margin:2px 2px 2px 0;}
-.trainer-msg{background:rgba(24,95,165,.1);border:.5px solid rgba(133,183,235,.2);border-radius:var(--radius-lg);padding:12px 14px;margin-bottom:1rem;}
-.trainer-label{font-size:10px;font-weight:600;color:#185FA5;text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px;display:flex;align-items:center;gap:5px;}
-.trainer-body{font-size:13px;color:var(--text-secondary);line-height:1.65;}
+/* Icelandic word */
+.icelandic-word { background: rgba(127,119,221,.12); border: .5px solid rgba(127,119,221,.3); border-radius: var(--radius-lg); padding: 10px 14px; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 12px; }
+.word-icon { font-size: 20px; color: #AFA9EC; flex-shrink: 0; }
+.word-title { font-size: 17px; font-weight: 600; color: #AFA9EC; }
+.word-meaning { font-size: 12px; color: var(--text-secondary); margin-top: 2px; line-height: 1.4; }
 
-.tabs{display:flex;gap:4px;background:var(--bg-secondary);border-radius:var(--radius-md);padding:4px;margin-bottom:1.25rem;}
-.tab{flex:1;padding:8px 4px;border-radius:6px;font-size:12px;font-weight:500;text-align:center;cursor:pointer;color:var(--text-secondary);border:none;background:transparent;}
-.tab.active{background:#2c2c2a;color:#f0ede6;border:.5px solid rgba(255,255,255,.15);}
-.time-block{margin-bottom:1rem;}
-.tb-header{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:var(--radius-md);margin-bottom:4px;}
-.tb-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;flex:1;}
-.tb-time{font-size:10px;opacity:.7;}
-.tb-count{font-size:11px;opacity:.7;margin-left:4px;}
-.tb-morning .tb-header{background:rgba(239,159,39,.16);color:#FAC775;}
-.tb-midday  .tb-header{background:rgba(24,95,165,.16);color:#85B7EB;}
-.tb-evening .tb-header{background:rgba(83,74,183,.2);color:#AFA9EC;}
+/* Streak */
+.streak-row { display: flex; gap: 8px; margin-bottom: 1.25rem; }
+.streak-card { flex: 1; background: var(--bg-primary); border: .5px solid var(--border-light); border-radius: var(--radius-lg); padding: 12px 8px; text-align: center; }
+.streak-val { font-size: 26px; font-weight: 600; line-height: 1.1; }
+.sv-fire { color: #D85A30; } .sv-ice { color: #85B7EB; } .sv-aurora { color: #AFA9EC; }
+.streak-lbl { font-size: 10px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: .05em; margin-top: 3px; }
 
-.block-card{background:var(--bg-primary);border:.5px solid var(--border-light);border-radius:var(--radius-lg);overflow:hidden;}
-.habit-item{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-bottom:.5px solid var(--border-light);cursor:pointer;user-select:none;-webkit-user-select:none;}
-.habit-item:last-child{border-bottom:none;}
-.habit-item:active{background:var(--bg-secondary);}
-.habit-item.skipped{opacity:.4;cursor:default;}
-.habit-check{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--border-mid);flex-shrink:0;margin-top:1px;position:relative;}
-.habit-check.checked{background:#0F6E56;border-color:#0F6E56;}
-.habit-check.checked::after{content:'';position:absolute;width:5px;height:9px;border:2px solid white;border-top:none;border-left:none;transform:rotate(45deg);top:2px;left:5px;}
-.habit-check.skip-check{background:var(--bg-secondary);border-color:transparent;}
-.habit-text{flex:1;min-width:0;}
-.habit-name{font-size:14px;color:var(--text-primary);line-height:1.4;}
-.habit-name.done{text-decoration:line-through;color:var(--text-secondary);}
-.habit-sub{font-size:11px;color:var(--text-tertiary);margin-top:2px;line-height:1.4;}
-.habit-badge{font-size:10px;padding:2px 7px;border-radius:99px;font-weight:500;flex-shrink:0;margin-top:2px;white-space:nowrap;}
-.b-glacier{background:rgba(29,158,117,.2);color:#9FE1CB;}.b-fire{background:rgba(216,90,48,.2);color:#F0997B;}.b-aurora{background:rgba(127,119,221,.2);color:#AFA9EC;}.b-gold{background:rgba(186,117,23,.2);color:#FAC775;}
+/* Day nav */
+.section-label { font-size: 10px; font-weight: 600; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 8px; }
+.day-nav { display: flex; gap: 5px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 1.25rem; scrollbar-width: none; }
+.day-nav::-webkit-scrollbar { display: none; }
+.day-pill { flex-shrink: 0; width: 42px; height: 52px; border-radius: var(--radius-md); border: .5px solid var(--border-light); background: var(--bg-secondary); display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; gap: 1px; }
+.day-pill .dp-num { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+.day-pill .dp-mon { font-size: 9px; color: var(--text-tertiary); }
+.day-pill .dp-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--text-tertiary); opacity: .35; margin-top: 1px; }
+.day-pill.active { background: #0a1f38; border-color: #185FA5; }
+.day-pill.active .dp-num, .day-pill.active .dp-mon { color: #85B7EB; }
+.day-pill.active .dp-dot { background: #85B7EB; opacity: .6; }
+.day-pill.complete { background: var(--success-bg); border-color: var(--success-border); }
+.day-pill.complete .dp-num { color: var(--success-text); }
+.day-pill.complete .dp-dot { background: var(--success-text); opacity: 1; }
+.day-pill.weekend .dp-num { color: #D85A30; }
+.day-pill.active.weekend .dp-num { color: #F0997B; }
 
-.bundle-tag{font-size:9px;background:rgba(127,119,221,.22);color:#AFA9EC;border-radius:4px;padding:1px 4px;margin-left:4px;vertical-align:middle;}
+/* Day header */
+.day-header { display: flex; align-items: center; gap: 12px; margin-bottom: 1rem; }
+.day-title { flex: 1; }
+.day-title h2 { font-size: 18px; font-weight: 600; }
+.day-title .day-date { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+.weekend-badge { display: inline-block; font-size: 10px; background: rgba(216,90,48,.22); color: #F0997B; border-radius: 4px; padding: 1px 6px; margin-left: 6px; vertical-align: middle; font-weight: 500; }
+.ring-wrap { position: relative; width: 60px; height: 60px; flex-shrink: 0; }
+.ring-wrap svg { transform: rotate(-90deg); display: block; }
+.ring-text { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; }
 
-.num-row{display:flex;align-items:center;gap:6px;margin-top:6px;}
-.num-row input{width:86px;height:30px;font-size:13px;padding:0 8px;border-radius:var(--radius-md);border:.5px solid var(--border-mid);background:var(--bg-secondary);color:var(--text-primary);outline:none;}
-.num-row input:focus{border-color:#185FA5;}
-.num-row .unit{font-size:11px;color:var(--text-tertiary);}
-.card{background:var(--bg-primary);border:.5px solid var(--border-light);border-radius:var(--radius-lg);padding:1rem 1.25rem;margin-bottom:1rem;}
-.card-title{font-size:14px;font-weight:600;color:var(--text-primary);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
-.card-title i{font-size:17px;color:var(--text-secondary);}
-.weight-big{display:flex;align-items:baseline;gap:6px;margin-bottom:10px;}
-.weight-num{font-size:32px;font-weight:600;color:#85B7EB;}
-.weight-u{font-size:15px;color:var(--text-secondary);}
-.weight-goal-lbl{font-size:12px;color:var(--text-secondary);margin-left:auto;}
+/* Countdown */
+.countdown-banner { background: linear-gradient(135deg, #042C53, #085041); border-radius: var(--radius-lg); padding: 14px 16px; margin-bottom: 1rem; display: flex; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
+.countdown-num { font-size: 40px; font-weight: 600; color: #9FE1CB; line-height: 1; }
+.countdown-label { font-size: 13px; color: #5DCAA5; margin-top: 2px; }
+.countdown-sub { font-size: 11px; color: #85B7EB; margin-top: 3px; }
+.trip-chips { flex: 1; min-width: 160px; }
+.trip-chips-label { font-size: 10px; color: #5DCAA5; text-transform: uppercase; letter-spacing: .07em; margin-bottom: 6px; font-weight: 500; }
+.trip-chip { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; background: rgba(239,159,39,.18); color: #FAC775; border-radius: 99px; padding: 3px 9px; margin: 2px 2px 2px 0; }
 
-.pbar-wrap{background:var(--bg-secondary);border-radius:99px;height:8px;overflow:hidden;margin-bottom:6px;}
-.pbar-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#1D9E75,#185FA5);transition:width .4s ease;}
-.pbar-labels{font-size:11px;color:var(--text-secondary);display:flex;justify-content:space-between;}
-.weight-input{width:190px;height:34px;font-size:14px;padding:0 10px;border-radius:var(--radius-md);border:.5px solid var(--border-mid);background:var(--bg-secondary);color:var(--text-primary);outline:none;}
-.weight-input:focus{border-color:#185FA5;}
-.input-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:.5px solid var(--border-light);}
-.input-row:last-child{border-bottom:none;}
-.input-row label{font-size:13px;color:var(--text-secondary);min-width:110px;flex-shrink:0;}
-.input-row input{flex:1;height:32px;font-size:14px;padding:0 8px;border-radius:var(--radius-md);border:.5px solid var(--border-mid);background:var(--bg-secondary);color:var(--text-primary);outline:none;}
-.input-row input:focus{border-color:#185FA5;}
-.unit-lbl{font-size:12px;color:var(--text-tertiary);min-width:36px;}
-.chart-wrap{position:relative;width:100%;height:180px;margin-top:12px;}
-.chart-legend{display:flex;gap:14px;margin-top:10px;font-size:11px;color:var(--text-secondary);flex-wrap:wrap;}
-.chart-legend span{display:flex;align-items:center;gap:4px;}
-.iceland-card{background:var(--bg-primary);border:.5px solid var(--border-light);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:1rem;}
-.iceland-img{width:100%;height:200px;object-fit:cover;display:block;background:#0a1628;}
-.iceland-placeholder{width:100%;height:200px;display:none;align-items:center;justify-content:center;background:linear-gradient(135deg,#042C53,#085041);}
-.iceland-body{padding:1rem 1.25rem;}
-.iceland-type-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
-.ic-type{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.08em;padding:2px 8px;border-radius:99px;}
-.ic-landmark{background:rgba(24,95,165,.2);color:#85B7EB;}.ic-restaurant{background:rgba(29,158,117,.2);color:#9FE1CB;}.ic-fact{background:rgba(127,119,221,.2);color:#AFA9EC;}.ic-trip{background:rgba(186,117,23,.2);color:#FAC775;}
+/* Trainer */
+.trainer-msg { background: rgba(24,95,165,.1); border: .5px solid rgba(133,183,235,.2); border-radius: var(--radius-lg); padding: 12px 14px; margin-bottom: 1rem; }
+.trainer-label { font-size: 10px; font-weight: 600; color: #85B7EB; text-transform: uppercase; letter-spacing: .07em; margin-bottom: 5px; display: flex; align-items: center; gap: 5px; }
+.trainer-body { font-size: 13px; color: var(--text-secondary); line-height: 1.65; }
 
-.iceland-title{font-size:16px;font-weight:600;color:var(--text-primary);margin-bottom:6px;line-height:1.3;}
-.iceland-desc{font-size:13px;color:var(--text-secondary);line-height:1.65;}
-.notes-area{width:100%;min-height:90px;font-size:13px;font-family:inherit;color:var(--text-primary);background:var(--bg-secondary);border:.5px solid var(--border-mid);border-radius:var(--radius-md);padding:10px 12px;resize:vertical;outline:none;line-height:1.6;}
-.notes-area:focus{border-color:#185FA5;}
-.notes-area::placeholder{color:var(--text-tertiary);}
-.notes-saved{font-size:11px;color:#1D9E75;margin-top:5px;opacity:0;transition:opacity .3s;}
-.notes-saved.show{opacity:1;}
-.claude-btn{display:flex;align-items:center;gap:10px;width:100%;padding:13px 16px;border-radius:var(--radius-lg);border:.5px solid var(--border-light);background:var(--bg-primary);cursor:pointer;text-align:left;margin-bottom:8px;text-decoration:none;}
-.claude-btn:active{background:var(--bg-secondary);}
-.cb-icon{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px;}
-.cb-checkin .cb-icon{background:linear-gradient(135deg,#042C53,#185FA5);color:#9FE1CB;}
-.cb-open    .cb-icon{background:linear-gradient(135deg,#0F6E56,#1D9E75);color:white;}
-.cb-coach   .cb-icon{background:linear-gradient(135deg,#534AB7,#7F77DD);color:white;}
-.cb-title{font-size:14px;font-weight:600;color:var(--text-primary);}
-.cb-sub{font-size:12px;color:var(--text-secondary);margin-top:2px;}
-.cb-arrow{font-size:16px;color:var(--text-tertiary);margin-left:auto;}
-.coach-panel{background:var(--bg-primary);border:.5px solid var(--border-light);border-radius:var(--radius-lg);overflow:hidden;margin-top:4px;}
-.coach-header{padding:10px 14px;border-bottom:.5px solid var(--border-light);display:flex;align-items:center;gap:8px;}
-.coach-header-title{font-size:13px;font-weight:600;color:var(--text-primary);flex:1;}
-.coach-status{width:8px;height:8px;border-radius:50%;background:#1D9E75;flex-shrink:0;}
-.coach-status.thinking{background:#FAC775;animation:pulse 1s infinite;}
-@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
-.coach-messages{height:280px;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px;scroll-behavior:smooth;}
-.coach-msg{max-width:85%;padding:9px 12px;border-radius:12px;font-size:13px;line-height:1.55;}
-.coach-msg.user{background:#185FA5;color:white;align-self:flex-end;border-bottom-right-radius:4px;}
-.coach-msg.ai{background:#2a2a28;color:var(--text-primary);align-self:flex-start;border-bottom-left-radius:4px;}
-.coach-msg.thinking{color:var(--text-tertiary);font-style:italic;}
-.coach-input-row{display:flex;gap:8px;padding:10px;border-top:.5px solid var(--border-light);background:var(--bg-secondary);}
-.coach-input{flex:1;height:38px;font-size:13px;font-family:inherit;padding:0 10px;border-radius:var(--radius-md);border:.5px solid var(--border-mid);background:var(--bg-primary);color:var(--text-primary);outline:none;}
-.coach-input:focus{border-color:#185FA5;}
-.coach-send{width:38px;height:38px;border-radius:var(--radius-md);background:#185FA5;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:white;font-size:16px;flex-shrink:0;}
-.coach-send:active{background:#0C447C;}
-.coach-send:disabled{background:var(--border-mid);cursor:default;}
-.comp-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
-.comp-row span{font-size:13px;color:var(--text-secondary);}
-.we-label{font-size:10px;background:rgba(216,90,48,.2);color:#F0997B;padding:3px 10px;border-radius:99px;}
+/* Tabs */
+.tabs { display: flex; gap: 4px; background: var(--bg-secondary); border-radius: var(--radius-md); padding: 4px; margin-bottom: 1.25rem; }
+.tab { flex: 1; padding: 8px 4px; border-radius: 6px; font-size: 12px; font-weight: 500; text-align: center; cursor: pointer; color: var(--text-secondary); border: none; background: transparent; }
+.tab.active { background: #2c2c2a; color: var(--text-primary); border: .5px solid rgba(255,255,255,.15); }
 
-.toast{position:fixed;bottom:calc(20px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%) translateY(80px);background:#042C53;color:#9FE1CB;padding:10px 20px;border-radius:var(--radius-lg);font-size:13px;font-weight:500;transition:transform .25s ease;z-index:999;white-space:nowrap;border:.5px solid #185FA5;pointer-events:none;box-shadow:0 4px 24px rgba(0,0,0,.3);}
-.toast.show{transform:translateX(-50%) translateY(0);}
+/* Time blocks */
+.time-block { margin-bottom: 1rem; }
+.tb-header { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: var(--radius-md); margin-bottom: 4px; }
+.tb-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .07em; flex: 1; }
+.tb-time { font-size: 10px; opacity: .7; }
+.tb-count { font-size: 11px; opacity: .7; margin-left: 4px; }
+.tb-morning .tb-header { background: rgba(239,159,39,.16); color: #FAC775; }
+.tb-midday  .tb-header { background: rgba(24,95,165,.16); color: #85B7EB; }
+.tb-evening .tb-header { background: rgba(83,74,183,.2); color: #AFA9EC; }
+.block-card { background: var(--bg-primary); border: .5px solid var(--border-light); border-radius: var(--radius-lg); overflow: hidden; }
 
-.slider-row{display:flex;flex-direction:column;gap:4px;margin-top:6px;}
-.slider-wrap{display:flex;align-items:center;gap:8px;}
-.slider-track{flex:1;-webkit-appearance:none;appearance:none;height:6px;border-radius:99px;outline:none;cursor:pointer;background:var(--bg-secondary);border:.5px solid var(--border-light);}
-.slider-track::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:20px;height:20px;border-radius:50%;background:#185FA5;cursor:pointer;border:2px solid white;box-shadow:0 1px 4px rgba(0,0,0,0.2);}
-.slider-track::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:#185FA5;cursor:pointer;border:2px solid white;box-shadow:0 1px 4px rgba(0,0,0,0.2);}
-.slider-val{font-size:13px;font-weight:600;color:#185FA5;min-width:52px;text-align:right;}
-.slider-labels{display:flex;justify-content:space-between;font-size:10px;color:var(--text-tertiary);}
+/* Habit items */
+.habit-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px; border-bottom: .5px solid var(--border-light); cursor: pointer; user-select: none; -webkit-user-select: none; }
+.habit-item:last-child { border-bottom: none; }
+.habit-item:active { background: var(--bg-secondary); }
+.habit-item.skipped { opacity: .4; cursor: default; }
+.habit-check { width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid var(--border-mid); flex-shrink: 0; margin-top: 1px; position: relative; transition: all .15s; }
+.habit-check.checked { background: #0F6E56; border-color: #0F6E56; }
+.habit-check.checked::after { content: ''; position: absolute; width: 5px; height: 9px; border: 2px solid white; border-top: none; border-left: none; transform: rotate(45deg); top: 2px; left: 5px; }
+.habit-check.skip-check { background: var(--bg-secondary); border-color: transparent; }
+.habit-text { flex: 1; min-width: 0; }
+.habit-name { font-size: 14px; color: var(--text-primary); line-height: 1.4; }
+.habit-name.done { text-decoration: line-through; color: var(--text-secondary); }
+.habit-sub { font-size: 11px; color: var(--text-tertiary); margin-top: 2px; line-height: 1.4; }
+.habit-badge { font-size: 10px; padding: 2px 7px; border-radius: 99px; font-weight: 500; flex-shrink: 0; margin-top: 2px; white-space: nowrap; }
+.b-glacier { background: rgba(29,158,117,.2); color: #9FE1CB; }
+.b-fire    { background: rgba(216,90,48,.2);  color: #F0997B; }
+.b-aurora  { background: rgba(127,119,221,.2);color: #AFA9EC; }
+.b-gold    { background: rgba(186,117,23,.2); color: #FAC775; }
+.bundle-tag { font-size: 9px; background: rgba(127,119,221,.22); color: #AFA9EC; border-radius: 4px; padding: 1px 4px; margin-left: 4px; vertical-align: middle; }
 
-.cheat-day-bar{display:flex;align-items:center;justify-content:space-between;background:#1c1c1a;border:.5px solid rgba(255,255,255,.1);border-radius:var(--radius-lg);padding:14px 16px;margin-top:1.5rem;}
-.cheat-day-label{font-size:14px;font-weight:600;color:var(--text-primary);}
-.cheat-day-sub{font-size:12px;color:var(--text-secondary);margin-top:2px;}
-.toggle-wrap{position:relative;width:48px;height:28px;flex-shrink:0;}
-.toggle-wrap input{opacity:0;width:0;height:0;position:absolute;}
-.toggle-slider{position:absolute;inset:0;background:#3a3a38;border-radius:99px;cursor:pointer;transition:background .2s;}
-.toggle-slider:before{content:'';position:absolute;width:22px;height:22px;left:3px;top:3px;background:white;border-radius:50%;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,0.2);}
-.toggle-wrap input:checked + .toggle-slider{background:#1D9E75;}
-.toggle-wrap input:checked + .toggle-slider:before{transform:translateX(20px);}
+/* Sliders */
+.slider-row { margin-top: 8px; }
+.slider-wrap { display: flex; align-items: center; gap: 8px; }
+.slider-track { flex: 1; -webkit-appearance: none; appearance: none; height: 6px; border-radius: 99px; outline: none; cursor: pointer; }
+.slider-track::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%; background: #185FA5; cursor: pointer; border: 2px solid #1c1c1a; box-shadow: 0 1px 4px rgba(0,0,0,.4); }
+.slider-track::-moz-range-thumb { width: 22px; height: 22px; border-radius: 50%; background: #185FA5; cursor: pointer; border: 2px solid #1c1c1a; }
+.slider-val { font-size: 13px; font-weight: 600; color: #85B7EB; min-width: 54px; text-align: right; }
+.slider-labels { display: flex; justify-content: space-between; font-size: 10px; color: var(--text-tertiary); margin-top: 3px; }
+
+/* Number inputs */
+.num-row { display: flex; align-items: center; gap: 6px; margin-top: 6px; }
+.num-row input { width: 86px; height: 30px; font-size: 13px; padding: 0 8px; border-radius: var(--radius-md); border: .5px solid var(--border-mid); background: var(--bg-secondary); color: var(--text-primary); outline: none; }
+.num-row input:focus { border-color: #185FA5; }
+.num-row .unit { font-size: 11px; color: var(--text-tertiary); }
+
+/* Cards */
+.card { background: var(--bg-primary); border: .5px solid var(--border-light); border-radius: var(--radius-lg); padding: 1rem 1.25rem; margin-bottom: 1rem; }
+.card-title { font-size: 14px; font-weight: 600; color: var(--text-primary); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.card-title i { font-size: 17px; color: var(--text-secondary); }
+
+/* Weight */
+.weight-big { display: flex; align-items: baseline; gap: 6px; margin-bottom: 10px; }
+.weight-num { font-size: 32px; font-weight: 600; color: #85B7EB; }
+.weight-u { font-size: 15px; color: var(--text-secondary); }
+.weight-goal-lbl { font-size: 12px; color: var(--text-secondary); margin-left: auto; }
+.pbar-wrap { background: var(--bg-secondary); border-radius: 99px; height: 8px; overflow: hidden; margin-bottom: 6px; }
+.pbar-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, #1D9E75, #185FA5); transition: width .4s ease; }
+.pbar-labels { font-size: 11px; color: var(--text-secondary); display: flex; justify-content: space-between; }
+.weight-input { width: 190px; height: 34px; font-size: 14px; padding: 0 10px; border-radius: var(--radius-md); border: .5px solid var(--border-mid); background: var(--bg-secondary); color: var(--text-primary); outline: none; }
+.weight-input:focus { border-color: #185FA5; }
+
+/* Input rows */
+.input-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: .5px solid var(--border-light); }
+.input-row:last-child { border-bottom: none; }
+.input-row label { font-size: 13px; color: var(--text-secondary); min-width: 110px; flex-shrink: 0; }
+.input-row input { flex: 1; height: 32px; font-size: 14px; padding: 0 8px; border-radius: var(--radius-md); border: .5px solid var(--border-mid); background: var(--bg-secondary); color: var(--text-primary); outline: none; }
+.input-row input:focus { border-color: #185FA5; }
+.unit-lbl { font-size: 12px; color: var(--text-tertiary); min-width: 36px; }
+
+/* Charts */
+.chart-wrap { position: relative; width: 100%; height: 180px; margin-top: 12px; }
+.chart-legend { display: flex; gap: 14px; margin-top: 10px; font-size: 11px; color: var(--text-secondary); flex-wrap: wrap; }
+.chart-legend span { display: flex; align-items: center; gap: 4px; }
+
+/* Iceland card */
+.iceland-card { background: var(--bg-primary); border: .5px solid var(--border-light); border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 1rem; }
+.iceland-img { width: 100%; height: 200px; object-fit: cover; display: block; background: #0a1628; }
+.iceland-placeholder { width: 100%; height: 200px; display: none; align-items: center; justify-content: center; background: linear-gradient(135deg, #042C53, #085041); }
+.iceland-body { padding: 1rem 1.25rem; }
+.iceland-type-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.ic-type { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: .08em; padding: 2px 8px; border-radius: 99px; }
+.ic-landmark   { background: rgba(24,95,165,.2);   color: #85B7EB; }
+.ic-restaurant { background: rgba(29,158,117,.2);  color: #9FE1CB; }
+.ic-fact       { background: rgba(127,119,221,.2); color: #AFA9EC; }
+.ic-trip       { background: rgba(186,117,23,.2);  color: #FAC775; }
+.iceland-title { font-size: 16px; font-weight: 600; color: var(--text-primary); margin-bottom: 6px; line-height: 1.3; }
+.iceland-desc  { font-size: 13px; color: var(--text-secondary); line-height: 1.65; }
+
+/* Notes */
+.notes-area { width: 100%; min-height: 90px; font-size: 13px; font-family: inherit; color: var(--text-primary); background: var(--bg-secondary); border: .5px solid var(--border-mid); border-radius: var(--radius-md); padding: 10px 12px; resize: vertical; outline: none; line-height: 1.6; }
+.notes-area:focus { border-color: #185FA5; }
+.notes-area::placeholder { color: var(--text-tertiary); }
+.notes-saved { font-size: 11px; color: #1D9E75; margin-top: 5px; opacity: 0; transition: opacity .3s; }
+.notes-saved.show { opacity: 1; }
+
+/* Claude buttons */
+.claude-btn { display: flex; align-items: center; gap: 10px; width: 100%; padding: 13px 16px; border-radius: var(--radius-lg); border: .5px solid var(--border-light); background: var(--bg-primary); cursor: pointer; text-align: left; margin-bottom: 8px; text-decoration: none; }
+.claude-btn:active { background: var(--bg-secondary); }
+.cb-icon { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 18px; }
+.cb-checkin .cb-icon { background: linear-gradient(135deg, #042C53, #185FA5); color: #9FE1CB; }
+.cb-open    .cb-icon { background: linear-gradient(135deg, #0F6E56, #1D9E75); color: white; }
+.cb-coach   .cb-icon { background: linear-gradient(135deg, #534AB7, #7F77DD); color: white; }
+.cb-title { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+.cb-sub   { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+.cb-arrow { font-size: 16px; color: var(--text-tertiary); margin-left: auto; }
+
+/* Coach panel */
+.coach-panel { background: var(--bg-primary); border: .5px solid var(--border-light); border-radius: var(--radius-lg); overflow: hidden; margin-top: 4px; }
+.coach-header { padding: 10px 14px; border-bottom: .5px solid var(--border-light); display: flex; align-items: center; gap: 8px; }
+.coach-header-title { font-size: 13px; font-weight: 600; color: var(--text-primary); flex: 1; }
+.coach-status { width: 8px; height: 8px; border-radius: 50%; background: #1D9E75; flex-shrink: 0; }
+.coach-status.thinking { background: #FAC775; animation: pulse 1s infinite; }
+@keyframes pulse { 0%,100%{opacity:1;}50%{opacity:.4;} }
+.coach-messages { height: 280px; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 10px; scroll-behavior: smooth; }
+.coach-msg { max-width: 85%; padding: 9px 12px; border-radius: 12px; font-size: 13px; line-height: 1.55; }
+.coach-msg.user { background: #185FA5; color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
+.coach-msg.ai { background: #2a2a28; color: var(--text-primary); align-self: flex-start; border-bottom-left-radius: 4px; }
+.coach-msg.thinking { color: var(--text-tertiary); font-style: italic; }
+.coach-input-row { display: flex; gap: 8px; padding: 10px; border-top: .5px solid var(--border-light); background: var(--bg-secondary); }
+.coach-input { flex: 1; height: 38px; font-size: 13px; font-family: inherit; padding: 0 10px; border-radius: var(--radius-md); border: .5px solid var(--border-mid); background: var(--bg-primary); color: var(--text-primary); outline: none; }
+.coach-input:focus { border-color: #185FA5; }
+.coach-send { width: 38px; height: 38px; border-radius: var(--radius-md); background: #185FA5; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: white; font-size: 16px; flex-shrink: 0; }
+.coach-send:active { background: #0C447C; }
+.coach-send:disabled { background: var(--border-mid); cursor: default; }
+
+/* Cheat day */
+.cheat-day-bar { display: flex; align-items: center; justify-content: space-between; background: var(--bg-primary); border: .5px solid var(--border-light); border-radius: var(--radius-lg); padding: 14px 16px; margin-top: 1.5rem; }
+.cheat-day-label { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+.cheat-day-sub { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+.toggle-wrap { position: relative; width: 48px; height: 28px; flex-shrink: 0; }
+.toggle-wrap input { opacity: 0; width: 0; height: 0; position: absolute; }
+.toggle-slider { position: absolute; inset: 0; background: #3a3a38; border-radius: 99px; cursor: pointer; transition: background .2s; }
+.toggle-slider::before { content: ''; position: absolute; width: 22px; height: 22px; left: 3px; top: 3px; background: white; border-radius: 50%; transition: transform .2s; box-shadow: 0 1px 3px rgba(0,0,0,.3); }
+.toggle-wrap input:checked + .toggle-slider { background: #1D9E75; }
+.toggle-wrap input:checked + .toggle-slider::before { transform: translateX(20px); }
+
+/* Misc */
+.comp-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.comp-row span { font-size: 13px; color: var(--text-secondary); }
+.we-label { font-size: 10px; background: rgba(216,90,48,.2); color: #F0997B; padding: 3px 10px; border-radius: 99px; }
+.log-weight-link { font-size: 12px; color: #85B7EB; cursor: pointer; font-weight: 500; margin-left: auto; }
+.toast { position: fixed; bottom: calc(20px + env(safe-area-inset-bottom,0px)); left: 50%; transform: translateX(-50%) translateY(80px); background: #042C53; color: #9FE1CB; padding: 10px 20px; border-radius: var(--radius-lg); font-size: 13px; font-weight: 500; transition: transform .25s ease; z-index: 999; white-space: nowrap; border: .5px solid #185FA5; pointer-events: none; box-shadow: 0 4px 24px rgba(0,0,0,.5); }
+.toast.show { transform: translateX(-50%) translateY(0); }
 </style>
 </head>
 <body>
@@ -214,6 +279,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
   <div id="dayContent"></div>
 </div>
 <div class="toast" id="toast"></div>
+
 <script>
 var START_DATE = new Date('2026-05-17T00:00:00');
 var TRIP_DATE  = new Date('2026-06-16T00:00:00');
@@ -285,539 +351,676 @@ var MSGS = [
 ];
 
 var CARDS = [
-  {t:'fact',ty:'Iceland has no mosquitoes',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Iceland_National_Park_Vatnajokull_2.jpg/1280px-Iceland_National_Park_Vatnajokull_2.jpg',desc:'Iceland is one of the few places on Earth with no native mosquito population. Something about the freeze-thaw cycle disrupts their breeding. One less thing to worry about on your super jeep tour.'},
-  {t:'restaurant',ty:'Dill Restaurant, Reykjavík',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Reykjavik_Old_harbour_2.jpg/1280px-Reykjavik_Old_harbour_2.jpg',desc:'Iceland\'s first Michelin-starred restaurant. Chef Gunnar Karl Gíslason serves New Nordic cuisine using foraged herbs, Icelandic lamb, and Arctic char. Book ahead — it fills fast in June.'},
-  {t:'landmark',ty:'Seljalandsfoss waterfall',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Seljalandsfoss%2C_Iceland.jpg/1280px-Seljalandsfoss%2C_Iceland.jpg',desc:'One of Iceland\'s most dramatic waterfalls — you can walk behind the curtain of water. At 60m tall, it\'s fed by the Eyjafjallajökull glacier. Only about 30 minutes from Vík.'},
-  {t:'trip',ty:'ION Adventure Hotel',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Aurora_over_Iceland.jpg/1280px-Aurora_over_iceland.jpg',desc:'Set in a dramatic lava field in Nesjavellir near Þingvellir, ION is one of the world\'s most architecturally stunning eco-hotels. Floor-to-ceiling windows face the geothermal landscape.'},
-  {t:'fact',ty:'Iceland sits on two tectonic plates',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Silfra_fissure_between_the_tectonic_plates_in_Iceland.jpg/1280px-Silfra_fissure_between_the_tectonic_plates_in_Iceland.jpg',desc:'The Mid-Atlantic Ridge runs right through Iceland, separating the North American and Eurasian plates. At Þingvellir on your Golden Circle day, you can literally walk between continents.'},
-  {t:'restaurant',ty:'Fiskmarkaðurinn, Reykjavík',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Reykjavik_harbor.jpg/1280px-Reykjavik_harbor.jpg',desc:'One of Reykjavík\'s top seafood restaurants with a Japanese-Icelandic fusion twist. Try the lobster soup or sushi-grade Arctic char. A perfect stop on your Reykjavík food tour.'},
-  {t:'landmark',ty:'Reynisfjara Black Sand Beach',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Reynisfjara_Black_Sand_Beach_Iceland.jpg/1280px-Reynisfjara_Black_Sand_Beach_Iceland.jpg',desc:'One of the most striking beaches on Earth — jet-black basalt sand, towering Reynisdrangar sea stacks, and powerful waves. Right near Vík. Unmissable.'},
-  {t:'trip',ty:'Katla Glacier — Super Jeep Tour',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Mýrdalsjökull_glacier.jpg/1280px-Mýrdalsjökull_glacier.jpg',desc:'Katla is one of Iceland\'s most powerful volcanoes, capped by the Mýrdalsjökull glacier. Your super jeep takes you up onto the ice. The views are completely otherworldly.'},
-  {t:'fact',ty:'The midnight sun in June',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Midnight_sun_at_Þórsmörk.jpg/1280px-Midnight_sun_at_%C3%9E%C3%B3rsm%C3%B6rk.jpg',desc:'In mid-June, Reykjavík gets nearly 24 hours of daylight. The sun barely dips below the horizon around midnight. Pack a sleep mask — and prepare to feel unnaturally energized.'},
-  {t:'restaurant',ty:'Matur og Drykkur, Reykjavík',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Reykjavik_city_center.jpg/1280px-Reykjavik_city_center.jpg',desc:'Traditional Icelandic recipes reimagined — whole baked cod head, lamb cheeks, and skyr desserts. A must on any Reykjavík food tour.'},
-  {t:'landmark',ty:'Geysir — the original geyser',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Strokkur_geyser_eruption%2C_Iceland.jpg/1280px-Strokkur_geyser_eruption%2C_Iceland.jpg',desc:'The word geyser comes from Geysir, Iceland. Nearby Strokkur erupts every 5-10 minutes, shooting boiling water 20-30m into the air. Your Golden Circle day includes this stop.'},
-  {t:'trip',ty:'The Lava Show, Vík',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Iceland_lava_flow.jpg/1280px-Iceland_lava_flow.jpg',desc:'Actual molten lava poured in front of a live audience — temperatures of 1,000°C just feet away. Described as the most visceral 30 minutes you\'ll have in Iceland. Nothing else like it.'},
-  {t:'fact',ty:'Iceland runs almost entirely on renewables',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Geothermal_energy_in_Iceland.jpg/1280px-Geothermal_energy_in_Iceland.jpg',desc:'Nearly 100% of Iceland\'s electricity comes from hydro and geothermal sources. The Blue Lagoon is fed by waste water from the Svartsengi geothermal power plant.'},
-  {t:'restaurant',ty:'Grillið, Reykjavík',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Reykjavik_panorama.jpg/1280px-Reykjavik_panorama.jpg',desc:'Perched on the 8th floor of the Radisson Blu with sweeping city and mountain views. Prime Icelandic beef and fresh seafood — one of the city\'s most celebrated fine dining rooms.'},
-  {t:'landmark',ty:'Þingvellir National Park',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Thingvellir_national_park.jpg/1280px-Thingvellir_national_park.jpg',desc:'A UNESCO World Heritage Site and birthplace of the world\'s oldest parliament (930 AD). Sits in a dramatic rift valley between two tectonic plates. Your Golden Circle starts here.'},
-  {t:'trip',ty:'Bergmál Music Festival',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Reykjavik_houses.jpg/1280px-Reykjavik_houses.jpg',desc:'Bergmál means Echo — concerts in lava caves, mountain valleys, and remote highlands. Iceland\'s music scene is world-class and deeply tied to its extraordinary landscape.'},
-  {t:'fact',ty:'Puffins arrive in Iceland every June',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Atlantic_Puffin_Fratercula_arctica.jpg/1280px-Atlantic_Puffin_Fratercula_arctica.jpg',desc:'Over 60% of the world\'s Atlantic puffins breed in Iceland. June is prime sighting season. Look for them on sea cliffs near Vík — almost certain on your South Coast day.'},
-  {t:'restaurant',ty:'Apotek Restaurant, Reykjavík',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Reykjav%C3%ADk_Old_City.jpg/1280px-Reykjav%C3%ADk_Old_City.jpg',desc:'Set in a stunning 1917 pharmacy building on Austurstræti. Modern Icelandic cuisine with an emphasis on fresh seafood. A beautiful setting for a celebratory dinner.'},
-  {t:'landmark',ty:'Skógafoss waterfall',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Skogafoss_1.jpg/1280px-Skogafoss_1.jpg',desc:'60m tall, 25m wide, constantly generating rainbows. Climb 370 steps to the top for panoramic South Coast views. One of Iceland\'s most photogenic spots.'},
-  {t:'trip',ty:'The Blue Lagoon',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Blue_Lagoon_Iceland.jpg/1280px-Blue_Lagoon_Iceland.jpg',desc:'The famous milky-blue geothermal spa near Grindavík. Silica-rich water at 38-40°C surrounded by black lava fields. Book your time slot well in advance — walk-ins not allowed.'},
-  {t:'fact',ty:'Icelandic horses have a fifth gait',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Icelandic_horses_in_Iceland.jpg/1280px-Icelandic_horses_in_Iceland.jpg',desc:'Isolated since the 9th century, Icelandic horses have a unique fifth gait called the tölt — extremely smooth and fast. No other breeds allowed into the country. You\'ll see them everywhere.'},
-  {t:'restaurant',ty:'Messinn, Reykjavík',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Reykjavik_Tjornin.jpg/1280px-Reykjavik_Tjornin.jpg',desc:'Pan-fried Icelandic fish in a sizzling cast-iron skillet — langoustine, cod, haddock. No frills, just perfect fresh fish. A Reykjavík institution, always packed for lunch.'},
-  {t:'landmark',ty:'Gullfoss — the Golden Waterfall',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Gullfoss.jpg/1280px-Gullfoss.jpg',desc:'The Hvítá river plunges 32m into a dramatic canyon. Third stop on your Golden Circle and arguably the most powerful single waterfall in Europe. Mist visible from miles away.'},
-  {t:'fact',ty:'June means midnight sun and perfect photography',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Midnight_sun_at_Þórsmörk.jpg/1280px-Midnight_sun_at_%C3%9E%C3%B3rsm%C3%B6rk.jpg',desc:'June is after aurora season, but the trade-off is extraordinary. At the summer solstice the sun never fully sets. The golden-hour light lasts all night. Every photo will be perfectly lit.'},
-  {t:'restaurant',ty:'Geiri Smart, Reykjavík',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Reykjavik_Old_harbour_2.jpg/1280px-Reykjavik_Old_harbour_2.jpg',desc:'A Reykjavík breakfast institution. Incredible pastries, open-faced sandwiches, and Icelandic skyr bowls. Great fuel before a long Golden Circle or South Coast driving day.'},
-  {t:'landmark',ty:'Kerið volcanic crater lake',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Ker%C3%AD%C3%B0_crater_lake_Iceland_2018.jpg/1280px-Ker%C3%AD%C3%B0_crater_lake_Iceland_2018.jpg',desc:'A 3,000-year-old volcanic crater filled with a turquoise lake, just off the Golden Circle route. Walk the rim and descend to the water\'s edge. Small but hauntingly beautiful.'},
-  {t:'fact',ty:'Iceland has the highest book publication rate on Earth',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Reykjavik_houses.jpg/1280px-Reykjavik_houses.jpg',desc:'More books are published per capita in Iceland than anywhere in the world. The tradition of giving books on Christmas Eve is called Jólabókaflóð — the Christmas Book Flood.'},
-  {t:'restaurant',ty:'Slippurinn, Vestmannaeyjar',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Westman_islands_from_above.jpg/1280px-Westman_islands_from_above.jpg',desc:'If you make a side trip to the Westman Islands, Slippurinn is one of Iceland\'s most acclaimed restaurants — hyper-local ingredients in a converted machine shop by the harbor.'},
-  {t:'landmark',ty:'Dyrhólaey arch near Vík',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Dyrhólaey_Iceland.jpg/1280px-Dyrh%C3%B3laey_Iceland.jpg',desc:'A dramatic basalt promontory with a natural arch large enough for a small plane to fly through. Panoramic views of Reynisfjara, the black sand beach, and the mountains of Vík.'},
-  {t:'trip',ty:'30 days. You\'re ready. Go.',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Blue_Lagoon_Iceland.jpg/1280px-Blue_Lagoon_Iceland.jpg',desc:'30 days of discipline, habit stacking, and volcanic determination. You showed up every day. You are lighter, stronger, and built for everything Iceland is about to throw at you. Gangi þér vel — go well.'}
+  {t:'fact',       ty:'Iceland has no mosquitoes',                img:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Iceland_National_Park_Vatnajokull_2.jpg/1280px-Iceland_National_Park_Vatnajokull_2.jpg',desc:'Iceland is one of the few places on Earth with no native mosquito population. Something about the freeze-thaw cycle disrupts their breeding. One less thing to worry about on your super jeep tour.'},
+  {t:'restaurant', ty:'Dill Restaurant, Reykjavík',               img:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Reykjavik_Old_harbour_2.jpg/1280px-Reykjavik_Old_harbour_2.jpg',desc:'Iceland\'s first Michelin-starred restaurant. Chef Gunnar Karl Gíslason serves New Nordic cuisine using foraged herbs, Icelandic lamb, and Arctic char. Book ahead — it fills fast in June.'},
+  {t:'landmark',   ty:'Seljalandsfoss waterfall',                  img:'https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Seljalandsfoss%2C_Iceland.jpg/1280px-Seljalandsfoss%2C_Iceland.jpg',desc:'One of Iceland\'s most dramatic waterfalls — you can walk behind the curtain of water. At 60m tall, it\'s fed by the Eyjafjallajökull glacier. Only about 30 minutes from Vík.'},
+  {t:'trip',       ty:'ION Adventure Hotel',                       img:'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Aurora_over_Iceland.jpg/1280px-Aurora_over_iceland.jpg',desc:'Set in a dramatic lava field in Nesjavellir near Þingvellir, ION is one of the world\'s most architecturally stunning eco-hotels. Floor-to-ceiling windows face the geothermal landscape.'},
+  {t:'fact',       ty:'Iceland sits on two tectonic plates',       img:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Silfra_fissure_between_the_tectonic_plates_in_Iceland.jpg/1280px-Silfra_fissure_between_the_tectonic_plates_in_Iceland.jpg',desc:'The Mid-Atlantic Ridge runs right through Iceland, separating the North American and Eurasian plates. At Þingvellir on your Golden Circle day, you can literally walk between continents.'},
+  {t:'restaurant', ty:'Fiskmarkaðurinn, Reykjavík',                img:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Reykjavik_harbor.jpg/1280px-Reykjavik_harbor.jpg',desc:'One of Reykjavík\'s top seafood restaurants with a Japanese-Icelandic fusion twist. Try the lobster soup or sushi-grade Arctic char. A perfect stop on your Reykjavík food tour.'},
+  {t:'landmark',   ty:'Reynisfjara Black Sand Beach',              img:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Reynisfjara_Black_Sand_Beach_Iceland.jpg/1280px-Reynisfjara_Black_Sand_Beach_Iceland.jpg',desc:'One of the most striking beaches on Earth — jet-black basalt sand, towering Reynisdrangar sea stacks, and powerful waves. Right near Vík. Unmissable.'},
+  {t:'trip',       ty:'Katla Glacier — Super Jeep Tour',           img:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Mýrdalsjökull_glacier.jpg/1280px-Mýrdalsjökull_glacier.jpg',desc:'Katla is one of Iceland\'s most powerful volcanoes, capped by the Mýrdalsjökull glacier. Your super jeep takes you up onto the ice. The views are completely otherworldly.'},
+  {t:'fact',       ty:'The midnight sun in June',                  img:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Midnight_sun_at_Þórsmörk.jpg/1280px-Midnight_sun_at_%C3%9E%C3%B3rsm%C3%B6rk.jpg',desc:'In mid-June, Reykjavík gets nearly 24 hours of daylight. The sun barely dips below the horizon around midnight. Pack a sleep mask — and prepare to feel unnaturally energized.'},
+  {t:'restaurant', ty:'Matur og Drykkur, Reykjavík',               img:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Reykjavik_city_center.jpg/1280px-Reykjavik_city_center.jpg',desc:'Traditional Icelandic recipes reimagined — whole baked cod head, lamb cheeks, and skyr desserts. A must on any Reykjavík food tour.'},
+  {t:'landmark',   ty:'Geysir — the original geyser',              img:'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Strokkur_geyser_eruption%2C_Iceland.jpg/1280px-Strokkur_geyser_eruption%2C_Iceland.jpg',desc:'The word geyser comes from Geysir, Iceland. Nearby Strokkur erupts every 5-10 minutes, shooting boiling water 20-30m into the air. Your Golden Circle day includes this stop.'},
+  {t:'trip',       ty:'The Lava Show, Vík',                        img:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Iceland_lava_flow.jpg/1280px-Iceland_lava_flow.jpg',desc:'Actual molten lava poured in front of a live audience — temperatures of 1,000°C just feet away. Described as the most visceral 30 minutes you\'ll have in Iceland.'},
+  {t:'fact',       ty:'Iceland runs almost entirely on renewables', img:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Geothermal_energy_in_Iceland.jpg/1280px-Geothermal_energy_in_Iceland.jpg',desc:'Nearly 100% of Iceland\'s electricity comes from hydro and geothermal sources. The Blue Lagoon is fed by waste water from the Svartsengi geothermal power plant.'},
+  {t:'restaurant', ty:'Grillið, Reykjavík',                        img:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Reykjavik_panorama.jpg/1280px-Reykjavik_panorama.jpg',desc:'Perched on the 8th floor of the Radisson Blu with sweeping city and mountain views. Prime Icelandic beef and fresh seafood — one of the city\'s most celebrated fine dining rooms.'},
+  {t:'landmark',   ty:'Þingvellir National Park',                  img:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Thingvellir_national_park.jpg/1280px-Thingvellir_national_park.jpg',desc:'A UNESCO World Heritage Site and birthplace of the world\'s oldest parliament (930 AD). Sits in a dramatic rift valley between two tectonic plates. Your Golden Circle starts here.'},
+  {t:'trip',       ty:'Bergmál Music Festival',                    img:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Reykjavik_houses.jpg/1280px-Reykjavik_houses.jpg',desc:'Bergmál means Echo — concerts in lava caves, mountain valleys, and remote highlands. Iceland\'s music scene is world-class and deeply tied to its extraordinary landscape.'},
+  {t:'fact',       ty:'Puffins arrive in Iceland every June',      img:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Atlantic_Puffin_Fratercula_arctica.jpg/1280px-Atlantic_Puffin_Fratercula_arctica.jpg',desc:'Over 60% of the world\'s Atlantic puffins breed in Iceland. June is prime sighting season. Look for them on sea cliffs near Vík — almost certain on your South Coast day.'},
+  {t:'restaurant', ty:'Apotek Restaurant, Reykjavík',              img:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Reykjav%C3%ADk_Old_City.jpg/1280px-Reykjav%C3%ADk_Old_City.jpg',desc:'Set in a stunning 1917 pharmacy building on Austurstræti. Modern Icelandic cuisine with an emphasis on fresh seafood. A beautiful setting for a celebratory dinner.'},
+  {t:'landmark',   ty:'Skógafoss waterfall',                       img:'https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Skogafoss_1.jpg/1280px-Skogafoss_1.jpg',desc:'60m tall, 25m wide, constantly generating rainbows. Climb 370 steps to the top for panoramic South Coast views. One of Iceland\'s most photogenic spots.'},
+  {t:'trip',       ty:'The Blue Lagoon',                           img:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Blue_Lagoon_Iceland.jpg/1280px-Blue_Lagoon_Iceland.jpg',desc:'The famous milky-blue geothermal spa near Grindavík. Silica-rich water at 38-40°C surrounded by black lava fields. Book your time slot well in advance.'},
+  {t:'fact',       ty:'Icelandic horses have a fifth gait',        img:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Icelandic_horses_in_Iceland.jpg/1280px-Icelandic_horses_in_Iceland.jpg',desc:'Isolated since the 9th century, Icelandic horses have a unique fifth gait called the tölt — extremely smooth and fast. No other breeds are allowed into the country.'},
+  {t:'restaurant', ty:'Messinn, Reykjavík',                        img:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Reykjavik_Tjornin.jpg/1280px-Reykjavik_Tjornin.jpg',desc:'Pan-fried Icelandic fish in a sizzling cast-iron skillet — langoustine, cod, haddock. No frills, just perfect fresh fish. A Reykjavík institution, always packed for lunch.'},
+  {t:'landmark',   ty:'Gullfoss — the Golden Waterfall',           img:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Gullfoss.jpg/1280px-Gullfoss.jpg',desc:'The Hvítá river plunges 32m into a dramatic canyon. Third stop on your Golden Circle and arguably the most powerful single waterfall in Europe.'},
+  {t:'fact',       ty:'June means midnight sun and perfect photography',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Midnight_sun_at_Þórsmörk.jpg/1280px-Midnight_sun_at_%C3%9E%C3%B3rsm%C3%B6rk.jpg',desc:'June is after aurora season, but the trade-off is extraordinary. At the summer solstice the sun never fully sets. The golden-hour light lasts all night.'},
+  {t:'restaurant', ty:'Geiri Smart, Reykjavík',                    img:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Reykjavik_Old_harbour_2.jpg/1280px-Reykjavik_Old_harbour_2.jpg',desc:'A Reykjavík breakfast institution. Incredible pastries, open-faced sandwiches, and Icelandic skyr bowls. Great fuel before a long Golden Circle or South Coast driving day.'},
+  {t:'landmark',   ty:'Kerið volcanic crater lake',                img:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Ker%C3%AD%C3%B0_crater_lake_Iceland_2018.jpg/1280px-Ker%C3%AD%C3%B0_crater_lake_Iceland_2018.jpg',desc:'A 3,000-year-old volcanic crater filled with a turquoise lake, just off the Golden Circle route. Walk the rim and descend to the water\'s edge.'},
+  {t:'fact',       ty:'Iceland has the highest book publication rate on Earth',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Reykjavik_houses.jpg/1280px-Reykjavik_houses.jpg',desc:'More books are published per capita in Iceland than anywhere in the world. The tradition of giving books on Christmas Eve is called Jólabókaflóð — the Christmas Book Flood.'},
+  {t:'restaurant', ty:'Slippurinn, Vestmannaeyjar',                img:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Westman_islands_from_above.jpg/1280px-Westman_islands_from_above.jpg',desc:'If you make a side trip to the Westman Islands, Slippurinn is one of Iceland\'s most acclaimed restaurants — hyper-local ingredients in a converted machine shop by the harbor.'},
+  {t:'landmark',   ty:'Dyrhólaey arch near Vík',                   img:'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Dyrhólaey_Iceland.jpg/1280px-Dyrh%C3%B3laey_Iceland.jpg',desc:'A dramatic basalt promontory with a natural arch large enough for a small plane to fly through. Panoramic views of Reynisfjara, the black sand beach, and the mountains of Vík.'},
+  {t:'trip',       ty:'30 days. You\'re ready. Go.',               img:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Blue_Lagoon_Iceland.jpg/1280px-Blue_Lagoon_Iceland.jpg',desc:'30 days of discipline, habit stacking, and volcanic determination. You showed up every day. Lighter, stronger, built for everything Iceland is about to throw at you. Gangi þér vel.'}
 ];
 
 var HABITS = [
-  {id:'workout',     block:'morning', name:'Workout completed',                sub:'Strength or cardio session',                      badge:'b-fire',    label:'Training'},
-  {id:'vitamins',    block:'morning', name:'Vitamins taken',                   sub:'Stack: with first morning drink',                 badge:'b-gold',    label:'Health',    bundle:true},
-  {id:'dental_am',   block:'morning', name:'Morning dental hygiene',           sub:'Brush and floss after coffee',                    badge:'b-glacier', label:'Hygiene'},
-  {id:'music',       block:'morning', name:'20-30 min piano or guitar',        sub:'Stack: after morning coffee',                     badge:'b-aurora',  label:'Music',     bundle:true},
-  {id:'treadmill',   block:'morning', name:'Treadmill during meetings',        sub:'Bundle: walk every call',                         badge:'b-fire',    label:'Movement',  bundle:true, weekdayOnly:true},
-  {id:'steps',       block:'morning', name:'8,000-10,000 steps target',        sub:'Track throughout the day',                        badge:'b-glacier', label:'Movement',  unit:'steps', ph:'9000'},
-  {id:'fast_end',    block:'midday',  name:'End fasting clock',                sub:'Log your break-fast time',                        badge:'b-fire',    label:'Fasting'},
-  {id:'water',       block:'midday',  name:'Drink 100 oz of water',            sub:'Refill at every meal — track throughout the day', badge:'b-glacier', label:'Hydration', unit:'oz', ph:'100', slider:true, sliderMax:120, sliderStep:5, sliderTarget:100},
-  {id:'calories',    block:'midday',  name:'Calories on track 1500-1700',      sub:'Log midday total so far',                         badge:'b-fire',    label:'Nutrition', unit:'kcal', ph:'800'},
-  {id:'protein_mid', block:'midday',  name:'Protein on track 150-180g',        sub:'Check your running protein total',                badge:'b-fire',    label:'Nutrition', unit:'g', ph:'80',  slider:true, sliderMax:200, sliderStep:5, sliderTarget:165},
-  {id:'sugar',       block:'midday',  name:'Zero added sugar',                 sub:'Check labels — no exceptions',                    badge:'b-glacier', label:'Clean fuel'},
-  {id:'fast_start',  block:'evening', name:'Start fasting clock',              sub:'Kitchen closed — log your start time',            badge:'b-fire',    label:'Fasting'},
-  {id:'calories_eod',block:'evening', name:'Final calorie log',                sub:'Close out daily total in app',                    badge:'b-fire',    label:'Nutrition', unit:'kcal', ph:'1600'},
-  {id:'protein_eod', block:'evening', name:'Final protein log',                sub:'Hit 150-180g for the day',                        badge:'b-fire',    label:'Nutrition', unit:'g', ph:'165'},
-  {id:'time_entries',block:'evening', name:'Work time entries done',           sub:'End-of-day ritual before closing laptop',         badge:'b-gold',    label:'Work',      bundle:true, weekdayOnly:true},
-  {id:'dental_pm',   block:'evening', name:'Evening dental hygiene',           sub:'Stack: right after time entries',                 badge:'b-glacier', label:'Hygiene',   bundle:true},
-  {id:'phone_limit', block:'evening', name:'Phone time limit maintained',      sub:'Stay within your daily screen time limit',        badge:'b-aurora',  label:'Mindset'},
-  {id:'sleep',       block:'evening', name:'7+ hours sleep goal',              sub:'In bed on time — log actual hours',               badge:'b-aurora',  label:'Recovery',  unit:'hrs', ph:'7.5'}
+  {id:'workout',     block:'morning', name:'Workout completed',               sub:'Strength or cardio session',                      badge:'b-fire',    label:'Training'},
+  {id:'vitamins',    block:'morning', name:'Vitamins taken',                  sub:'Stack: with first morning drink',                 badge:'b-gold',    label:'Health',    bundle:true},
+  {id:'dental_am',   block:'morning', name:'Morning dental hygiene',          sub:'Brush and floss after coffee',                    badge:'b-glacier', label:'Hygiene'},
+  {id:'music',       block:'morning', name:'20-30 min piano or guitar',       sub:'Stack: after morning coffee',                     badge:'b-aurora',  label:'Music',     bundle:true},
+  {id:'treadmill',   block:'morning', name:'Treadmill during meetings',       sub:'Bundle: walk every call',                         badge:'b-fire',    label:'Movement',  bundle:true, weekdayOnly:true},
+  {id:'steps',       block:'morning', name:'8,000-10,000 steps target',       sub:'Track throughout the day',                        badge:'b-glacier', label:'Movement',  unit:'steps', ph:'9000'},
+  {id:'fast_end',    block:'midday',  name:'End fasting clock',               sub:'Log your break-fast time',                        badge:'b-fire',    label:'Fasting'},
+  {id:'water',       block:'midday',  name:'Drink 100 oz of water',           sub:'Refill at every meal — track throughout the day', badge:'b-glacier', label:'Hydration', unit:'oz',    ph:'100', slider:true, sliderMax:120, sliderStep:5,  sliderTarget:100},
+  {id:'calories',    block:'midday',  name:'Calories on track 1500-1700',     sub:'Log midday total so far',                         badge:'b-fire',    label:'Nutrition', unit:'kcal',  ph:'800'},
+  {id:'protein_mid', block:'midday',  name:'Protein on track 150-180g',       sub:'Check your running protein total',                badge:'b-fire',    label:'Nutrition', unit:'g',     ph:'80',  slider:true, sliderMax:200, sliderStep:5,  sliderTarget:165},
+  {id:'sugar',       block:'midday',  name:'Zero added sugar',                sub:'Check labels — no exceptions',                    badge:'b-glacier', label:'Clean fuel'},
+  {id:'fast_start',  block:'evening', name:'Start fasting clock',             sub:'Kitchen closed — log your start time',            badge:'b-fire',    label:'Fasting'},
+  {id:'calories_eod',block:'evening', name:'Final calorie log',               sub:'Close out daily total in app',                    badge:'b-fire',    label:'Nutrition', unit:'kcal',  ph:'1600'},
+  {id:'protein_eod', block:'evening', name:'Final protein log',               sub:'Hit 150-180g for the day',                        badge:'b-fire',    label:'Nutrition', unit:'g',     ph:'165'},
+  {id:'time_entries',block:'evening', name:'Work time entries done',          sub:'End-of-day ritual before closing laptop',         badge:'b-gold',    label:'Work',      bundle:true,  weekdayOnly:true},
+  {id:'dental_pm',   block:'evening', name:'Evening dental hygiene',          sub:'Stack: right after time entries',                 badge:'b-glacier', label:'Hygiene',   bundle:true},
+  {id:'phone_limit', block:'evening', name:'Phone time limit maintained',     sub:'Stay within your daily screen time limit',        badge:'b-aurora',  label:'Mindset'},
+  {id:'sleep',       block:'evening', name:'7+ hours sleep goal',             sub:'In bed on time — log actual hours',               badge:'b-aurora',  label:'Recovery',  unit:'hrs',   ph:'7.5'}
 ];
 
 var BLOCK_META = {
-  morning:{label:'Morning',time:'Wake up to midday', icon:'ti-sun',      cls:'tb-morning'},
-  midday: {label:'Midday', time:'Noon to afternoon', icon:'ti-sun-high', cls:'tb-midday'},
-  evening:{label:'Evening',time:'Dinner to bed',     icon:'ti-moon',     cls:'tb-evening'}
+  morning: {label:'Morning', time:'Wake up to midday',  icon:'ti-sun',      cls:'tb-morning'},
+  midday:  {label:'Midday',  time:'Noon to afternoon',  icon:'ti-sun-high', cls:'tb-midday'},
+  evening: {label:'Evening', time:'Dinner to bed',      icon:'ti-moon',     cls:'tb-evening'}
 };
 
-var DB={}, currentDay=1, activeTab='habits', wChart=null, cChart=null, coachHistory=[];
+var DB = {}, currentDay = 1, activeTab = 'habits', wChart = null, cChart = null, coachHistory = [];
 
-function loadDB(){try{var s=localStorage.getItem('eldborg_v1');if(s)DB=JSON.parse(s);}catch(e){}}
-function saveDB(){try{localStorage.setItem('eldborg_v1',JSON.stringify(DB));}catch(e){}}
-function getDay(d){if(!DB[d])DB[d]={habits:{},nums:{},weight:null,note:''};return DB[d];}
-function getDayDate(d){var dt=new Date(START_DATE);dt.setDate(START_DATE.getDate()+d-1);return dt;}
-function isWeekend(d){var dow=getDayDate(d).getDay();return dow===0||dow===6;}
-function getHabitsForDay(d){return HABITS.filter(function(h){return !(h.weekdayOnly&&isWeekend(d));});}
+function loadDB() { try { var s = localStorage.getItem('eldborg_v1'); if (s) DB = JSON.parse(s); } catch(e) {} }
+function saveDB() { try { localStorage.setItem('eldborg_v1', JSON.stringify(DB)); } catch(e) {} }
+function getDay(d) { if (!DB[d]) DB[d] = {habits:{}, nums:{}, weight:null, note:'', cheatDay:false}; return DB[d]; }
+function getDayDate(d) { var dt = new Date(START_DATE); dt.setDate(START_DATE.getDate() + d - 1); return dt; }
+function isWeekend(d) { var dow = getDayDate(d).getDay(); return dow === 0 || dow === 6; }
+function getHabitsForDay(d) { return HABITS.filter(function(h) { return !(h.weekdayOnly && isWeekend(d)); }); }
 
-function getDayComp(d){
-  var day=DB[d];if(!day)return 0;
-  var habits=getHabitsForDay(d);
-  var n=0;
-  habits.forEach(function(h){if(day.habits[h.id])n++;});
-  if(day.weight)n++;
-  return Math.round((n/(habits.length+1))*100);
+function getDayComp(d) {
+  var day = DB[d]; if (!day) return 0;
+  if (day.cheatDay) return 100;
+  var habits = getHabitsForDay(d);
+  var n = 0; habits.forEach(function(h) { if (day.habits[h.id]) n++; });
+  if (day.weight) n++;
+  return Math.round((n / (habits.length + 1)) * 100);
 }
 
-function calcStreak(){var s=0;for(var d=currentDay-1;d>=1;d--){if(getDayComp(d)>=70)s++;else break;}return s;}
-function getStartWeight(){for(var d=1;d<=30;d++){if(DB[d]&&DB[d].weight)return DB[d].weight;}return 0;}
-function calcLbsLost(){var sw=getStartWeight(),lw=sw;for(var d=30;d>=1;d--){if(DB[d]&&DB[d].weight){lw=DB[d].weight;break;}}return sw?Math.max(0,parseFloat((sw-lw).toFixed(1))):0;}
-function daysUntilTrip(){var now=new Date();now.setHours(0,0,0,0);return Math.max(0,Math.ceil((TRIP_DATE-now)/86400000));}
+function calcStreak() { var s = 0; for (var d = currentDay-1; d >= 1; d--) { if (getDayComp(d) >= 70) s++; else break; } return s; }
+function getStartWeight() { for (var d = 1; d <= 30; d++) { if (DB[d] && DB[d].weight) return DB[d].weight; } return 0; }
+function calcLbsLost() {
+  var sw = getStartWeight(), lw = sw;
+  for (var d = 30; d >= 1; d--) { if (DB[d] && DB[d].weight) { lw = DB[d].weight; break; } }
+  return sw ? Math.max(0, parseFloat((sw - lw).toFixed(1))) : 0;
+}
+function daysUntilTrip() { var now = new Date(); now.setHours(0,0,0,0); return Math.max(0, Math.ceil((TRIP_DATE - now) / 86400000)); }
 
-function updateTopBar(){
-  var ll=calcLbsLost(),sw=getStartWeight();
-  var pct=sw?Math.min(100,Math.round((ll/15)*100)):0;
-  var done=0;for(var k in DB){if(getDayComp(parseInt(k))>=70)done++;}
-  document.getElementById('headerStats').innerHTML=
-    '<div class="header-stat"><div class="val">'+pct+'%</div><div class="lbl">to goal</div></div>'+
-    '<div class="header-stat"><div class="val">'+(ll>0?'-'+ll.toFixed(1):'--')+'</div><div class="lbl">lbs lost</div></div>'+
-    '<div class="header-stat"><div class="val">'+daysUntilTrip()+'</div><div class="lbl">to Iceland</div></div>'+
+function updateTopBar() {
+  var ll = calcLbsLost(), sw = getStartWeight();
+  var pct = sw ? Math.min(100, Math.round((ll/15)*100)) : 0;
+  var done = 0; for (var k in DB) { if (getDayComp(parseInt(k)) >= 70) done++; }
+  document.getElementById('headerStats').innerHTML =
+    '<div class="header-stat"><div class="val">'+pct+'%</div><div class="lbl">to goal</div></div>' +
+    '<div class="header-stat"><div class="val">'+(ll>0?'-'+ll.toFixed(1):'--')+'</div><div class="lbl">lbs lost</div></div>' +
+    '<div class="header-stat"><div class="val">'+daysUntilTrip()+'</div><div class="lbl">to Iceland</div></div>' +
     '<div class="header-stat"><div class="val">'+getDayComp(currentDay)+'%</div><div class="lbl">today</div></div>';
-  document.getElementById('streakVal').textContent=calcStreak();
-  document.getElementById('completedDays').textContent=done;
-  document.getElementById('lbsLostVal').textContent=ll.toFixed(1);
+  document.getElementById('streakVal').textContent = calcStreak();
+  document.getElementById('completedDays').textContent = done;
+  document.getElementById('lbsLostVal').textContent = ll.toFixed(1);
 }
 
-function buildDayNav(){
-  var nav=document.getElementById('dayNav');nav.innerHTML='';
-  for(var d=1;d<=30;d++){
-    (function(day){
-      var dt=getDayDate(day),mon=dt.toLocaleString('default',{month:'short'}),dn=dt.getDate();
-      var comp=getDayComp(day),we=isWeekend(day);
-      var el=document.createElement('div');
-      el.className='day-pill'+(day===currentDay?' active':'')+(comp>=70?' complete':'')+(we?' weekend':'');
-      el.innerHTML='<div class="dp-num">'+day+'</div><div class="dp-mon">'+mon+' '+dn+'</div><div class="dp-dot"></div>';
-      el.onclick=function(){currentDay=day;activeTab='habits';buildDayNav();buildDayContent();updateTopBar();setTimeout(function(){el.scrollIntoView({block:'nearest',inline:'center',behavior:'smooth'});},30);};
+function buildDayNav() {
+  var nav = document.getElementById('dayNav'); nav.innerHTML = '';
+  for (var d = 1; d <= 30; d++) {
+    (function(day) {
+      var dt = getDayDate(day), mon = dt.toLocaleString('default',{month:'short'}), dn = dt.getDate();
+      var comp = getDayComp(day), we = isWeekend(day);
+      var el = document.createElement('div');
+      el.className = 'day-pill' + (day===currentDay?' active':'') + (comp>=70?' complete':'') + (we?' weekend':'');
+      el.innerHTML = '<div class="dp-num">'+day+'</div><div class="dp-mon">'+mon+' '+dn+'</div><div class="dp-dot"></div>';
+      el.onclick = function() { currentDay = day; activeTab = 'habits'; buildDayNav(); buildDayContent(); updateTopBar(); setTimeout(function(){el.scrollIntoView({block:'nearest',inline:'center',behavior:'smooth'});},30); };
       nav.appendChild(el);
     })(d);
   }
 }
 
-function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+// ── Build habit row using DOM elements (no inline handlers) ──────────────
+function buildHabitRow(h, day, isWe) {
+  var chk = !!day.habits[h.id];
+  var skip = h.weekdayOnly && isWe;
 
-function habitRow(h,day,isWe){
-  var chk=!!day.habits[h.id];
-  var skip=h.weekdayOnly&&isWe;
-  var tags=h.bundle?'<span class="bundle-tag">bundle</span>':'';
-  var cc='habit-check'+(skip?' skip-check':chk?' checked':'');
-  var nv=parseFloat(day.nums[h.id])||0;
-  var ca=skip?'':' onclick="toggleHabit(\\''+h.id+'\\')"';
-  var aa=skip?'aria-disabled="true"':'role="checkbox" aria-checked="'+chk+'" tabindex="0"';
-  var inputHtml='';
-  if(!skip&&h.unit){
-    if(h.slider){
-      var cur=nv,pct=Math.min(100,Math.round((cur/h.sliderMax)*100));
-      var hit=cur>=h.sliderTarget,fc=hit?'#1D9E75':'#185FA5';
-      inputHtml='<div class="slider-row" onclick="event.stopPropagation()">'+
-        '<div class="slider-wrap">'+
-          '<input class="slider-track" id="sl-'+h.id+'" type="range" min="0" max="'+h.sliderMax+'" step="'+h.sliderStep+'" value="'+cur+'" '+
-            'oninput="updateSlider(\\''+h.id+'\\',this.value,'+h.sliderTarget+')" '+
-            'style="background:linear-gradient(to right,'+fc+' '+pct+'%,var(--bg-secondary) '+pct+'%)">'+
-          '<span class="slider-val" id="sv-'+h.id+'">'+cur+' '+h.unit+'</span>'+
-        '</div>'+
-        '<div class="slider-labels"><span>0</span><span style="color:'+fc+';font-weight:600;">Target: '+h.sliderTarget+' '+h.unit+'</span><span>'+h.sliderMax+'</span></div>'+
-      '</div>';
+  var row = document.createElement('div');
+  row.className = 'habit-item' + (skip ? ' skipped' : '');
+  row.id = 'hi-' + h.id;
+  row.setAttribute('role', 'checkbox');
+  row.setAttribute('aria-checked', chk);
+  if (!skip) row.setAttribute('tabindex', '0');
+
+  var checkEl = document.createElement('div');
+  checkEl.className = 'habit-check' + (skip ? ' skip-check' : chk ? ' checked' : '');
+  checkEl.id = 'hc-' + h.id;
+
+  var textEl = document.createElement('div');
+  textEl.className = 'habit-text';
+
+  var nameEl = document.createElement('div');
+  nameEl.className = 'habit-name' + (chk && !skip ? ' done' : '');
+  nameEl.id = 'hn-' + h.id;
+  nameEl.textContent = h.name;
+  if (h.bundle) {
+    var tag = document.createElement('span');
+    tag.className = 'bundle-tag';
+    tag.textContent = 'bundle';
+    nameEl.appendChild(tag);
+  }
+
+  var subEl = document.createElement('div');
+  subEl.className = 'habit-sub';
+  subEl.textContent = skip ? 'Weekend — not needed today' : h.sub;
+
+  textEl.appendChild(nameEl);
+  textEl.appendChild(subEl);
+
+  if (h.unit && !skip) {
+    var nv = parseFloat(day.nums[h.id]) || 0;
+    if (h.slider) {
+      var pct = Math.min(100, Math.round((nv / h.sliderMax) * 100));
+      var hit = nv >= h.sliderTarget;
+      var fc = hit ? '#1D9E75' : '#85B7EB';
+      var sliderRow = document.createElement('div');
+      sliderRow.className = 'slider-row';
+      var sliderWrap = document.createElement('div');
+      sliderWrap.className = 'slider-wrap';
+      var sliderInput = document.createElement('input');
+      sliderInput.type = 'range';
+      sliderInput.className = 'slider-track';
+      sliderInput.id = 'sl-' + h.id;
+      sliderInput.min = 0; sliderInput.max = h.sliderMax; sliderInput.step = h.sliderStep; sliderInput.value = nv;
+      sliderInput.style.background = 'linear-gradient(to right,' + fc + ' ' + pct + '%,var(--bg-secondary) ' + pct + '%)';
+      (function(hid, htarget, hmax, hunit) {
+        sliderInput.addEventListener('input', function(e) { e.stopPropagation(); handleSlider(hid, parseFloat(e.target.value), htarget, hmax, hunit); });
+      })(h.id, h.sliderTarget, h.sliderMax, h.unit);
+      var sliderVal = document.createElement('span');
+      sliderVal.className = 'slider-val';
+      sliderVal.id = 'sv-' + h.id;
+      sliderVal.style.color = fc;
+      sliderVal.textContent = nv + ' ' + h.unit;
+      sliderWrap.appendChild(sliderInput);
+      sliderWrap.appendChild(sliderVal);
+      var sliderLabels = document.createElement('div');
+      sliderLabels.className = 'slider-labels';
+      sliderLabels.innerHTML = '<span>0</span><span style="color:' + fc + ';font-weight:600;">Target: ' + h.sliderTarget + ' ' + h.unit + '</span><span>' + h.sliderMax + '</span>';
+      sliderRow.appendChild(sliderWrap);
+      sliderRow.appendChild(sliderLabels);
+      sliderRow.addEventListener('click', function(e) { e.stopPropagation(); });
+      textEl.appendChild(sliderRow);
     } else {
-      inputHtml='<div class="num-row" onclick="event.stopPropagation()"><input type="number" step="any" placeholder="'+h.ph+'" value="'+(nv||'')+'" onchange="setNum(\\''+h.id+'\\',this.value)"><span class="unit">'+h.unit+'</span></div>';
+      var numRow = document.createElement('div');
+      numRow.className = 'num-row';
+      var numInput = document.createElement('input');
+      numInput.type = 'number'; numInput.step = 'any'; numInput.placeholder = h.ph; numInput.value = nv || '';
+      (function(hid) {
+        numInput.addEventListener('change', function(e) { e.stopPropagation(); setNum(hid, e.target.value); });
+      })(h.id);
+      var unitSpan = document.createElement('span');
+      unitSpan.className = 'unit'; unitSpan.textContent = h.unit;
+      numRow.appendChild(numInput); numRow.appendChild(unitSpan);
+      numRow.addEventListener('click', function(e) { e.stopPropagation(); });
+      textEl.appendChild(numRow);
     }
   }
-  return '<div class="habit-item'+(skip?' skipped':'')+'" id="hi-'+h.id+'"'+ca+' '+aa+'>'+
-    '<div class="'+cc+'" id="hc-'+h.id+'"></div>'+
-    '<div class="habit-text">'+
-      '<div class="habit-name'+(chk&&!skip?' done':'')+'" id="hn-'+h.id+'">'+h.name+tags+'</div>'+
-      '<div class="habit-sub">'+(skip?'Weekend — not needed today':h.sub)+'</div>'+
-      inputHtml+
-    '</div>'+
-    '<span class="habit-badge '+h.badge+'">'+h.label+'</span>'+
-  '</div>';
+
+  var badge = document.createElement('span');
+  badge.className = 'habit-badge ' + h.badge;
+  badge.textContent = h.label;
+
+  row.appendChild(checkEl);
+  row.appendChild(textEl);
+  row.appendChild(badge);
+
+  if (!skip) {
+    row.addEventListener('click', function() { toggleHabit(h.id); });
+  }
+
+  return row;
 }
 
-function buildDayContent(){
-  var day=getDay(currentDay);
-  var dt=getDayDate(currentDay);
-  var dateStr=dt.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
-  var isWe=isWeekend(currentDay);
-  var word=WORDS[currentDay-1];
-  var card=CARDS[currentDay-1];
-  var dTrip=daysUntilTrip();
-  document.getElementById('icelandicWord').textContent=word.w;
-  document.getElementById('icelandicMeaning').textContent=word.m;
+function buildDayContent() {
+  var day = getDay(currentDay);
+  var dt = getDayDate(currentDay);
+  var dateStr = dt.toLocaleDateString('en-US', {weekday:'long', month:'long', day:'numeric', year:'numeric'});
+  var isWe = isWeekend(currentDay);
+  var word = WORDS[currentDay-1];
+  var card = CARDS[currentDay-1];
+  var dTrip = daysUntilTrip();
 
-  var habits=getHabitsForDay(currentDay);
-  var total=habits.length+1;
-  var checked=habits.filter(function(h){return day.habits[h.id];}).length+(day.weight?1:0);
-  var comp=getDayComp(currentDay);
-  var circ=2*Math.PI*25,offset=Math.round(circ*(1-comp/100));
-  var ringColor=comp>=70?'#1D9E75':'#185FA5';
-  var sw=getStartWeight(),cw=day.weight||0;
-  var lost=sw&&cw?Math.max(0,sw-cw):calcLbsLost();
-  var pp=sw?Math.min(100,(lost/15)*100):0;
-  var h='';
+  document.getElementById('icelandicWord').textContent = word.w;
+  document.getElementById('icelandicMeaning').textContent = word.m;
 
-  // Header
-  h+='<div class="day-header">'+
-    '<div class="day-title"><h2>Day '+currentDay+(isWe?'<span class="weekend-badge">Weekend</span>':'')+'</h2><div class="day-date">'+dateStr+'</div></div>'+
-    '<div class="ring-wrap" aria-label="'+comp+'% complete">'+
-      '<svg width="60" height="60" viewBox="0 0 60 60">'+
-        '<circle cx="30" cy="30" r="25" fill="none" stroke="rgba(128,128,128,0.15)" stroke-width="5"/>'+
-        '<circle id="ringArc" cx="30" cy="30" r="25" fill="none" stroke="'+ringColor+'" stroke-width="5" stroke-dasharray="'+Math.round(circ)+'" stroke-dashoffset="'+offset+'" stroke-linecap="round"/>'+
-      '</svg>'+
-      '<div class="ring-text" id="ringPct">'+comp+'%</div>'+
-    '</div>'+
-  '</div>';
+  var habits = getHabitsForDay(currentDay);
+  var total = habits.length + 1;
+  var checked = habits.filter(function(h){return day.habits[h.id];}).length + (day.weight?1:0);
+  var comp = getDayComp(currentDay);
+  var circ = 2 * Math.PI * 25, offset = Math.round(circ * (1 - comp/100));
+  var ringColor = comp >= 70 ? '#1D9E75' : '#185FA5';
+  var sw = getStartWeight(), cw = day.weight || 0;
+  var lost = sw && cw ? Math.max(0, sw-cw) : calcLbsLost();
+  var pp = sw ? Math.min(100, (lost/15)*100) : 0;
+
+  var content = document.getElementById('dayContent');
+  content.innerHTML = '';
+
+  // Day header
+  var dayHeader = document.createElement('div');
+  dayHeader.className = 'day-header';
+  dayHeader.innerHTML =
+    '<div class="day-title"><h2>Day ' + currentDay + (isWe ? '<span class="weekend-badge">Weekend</span>' : '') + '</h2><div class="day-date">' + dateStr + '</div></div>' +
+    '<div class="ring-wrap" aria-label="' + comp + '% complete">' +
+      '<svg width="60" height="60" viewBox="0 0 60 60">' +
+        '<circle cx="30" cy="30" r="25" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="5"/>' +
+        '<circle id="ringArc" cx="30" cy="30" r="25" fill="none" stroke="' + ringColor + '" stroke-width="5" stroke-dasharray="' + Math.round(circ) + '" stroke-dashoffset="' + offset + '" stroke-linecap="round"/>' +
+      '</svg>' +
+      '<div class="ring-text" id="ringPct">' + comp + '%</div>' +
+    '</div>';
+  content.appendChild(dayHeader);
 
   // Countdown
-  if(dTrip>0){
-    h+='<div class="countdown-banner">'+
-      '<div><div class="countdown-num">'+dTrip+'</div><div class="countdown-label">days until Iceland</div><div class="countdown-sub">~June 16, 2026 · ION Adventure Hotel</div></div>'+
-      '<div class="trip-chips"><div class="trip-chips-label">Your itinerary</div>'+
-        '<span class="trip-chip"><i class="ti ti-building" style="font-size:11px;"></i>ION Hotel</span>'+
-        '<span class="trip-chip"><i class="ti ti-flame" style="font-size:11px;"></i>Lava Show</span>'+
-        '<span class="trip-chip"><i class="ti ti-mountain" style="font-size:11px;"></i>Katla</span>'+
-        '<span class="trip-chip"><i class="ti ti-beach" style="font-size:11px;"></i>Black Sand</span>'+
-        '<span class="trip-chip"><i class="ti ti-circle" style="font-size:11px;"></i>Golden Circle</span>'+
-        '<span class="trip-chip"><i class="ti ti-music" style="font-size:11px;"></i>Bergmál</span>'+
-        '<span class="trip-chip"><i class="ti ti-droplet" style="font-size:11px;"></i>Blue Lagoon</span>'+
-        '<span class="trip-chip"><i class="ti ti-tools-kitchen-2" style="font-size:11px;"></i>Food Tour</span>'+
-      '</div>'+
-    '</div>';
+  if (dTrip > 0) {
+    var cb = document.createElement('div');
+    cb.className = 'countdown-banner';
+    cb.innerHTML =
+      '<div><div class="countdown-num">'+dTrip+'</div><div class="countdown-label">days until Iceland</div><div class="countdown-sub">~June 16, 2026 · ION Adventure Hotel</div></div>' +
+      '<div class="trip-chips"><div class="trip-chips-label">Your itinerary</div>' +
+        '<span class="trip-chip"><i class="ti ti-building" style="font-size:11px;"></i>ION Hotel</span>' +
+        '<span class="trip-chip"><i class="ti ti-flame" style="font-size:11px;"></i>Lava Show</span>' +
+        '<span class="trip-chip"><i class="ti ti-mountain" style="font-size:11px;"></i>Katla</span>' +
+        '<span class="trip-chip"><i class="ti ti-beach" style="font-size:11px;"></i>Black Sand</span>' +
+        '<span class="trip-chip"><i class="ti ti-circle" style="font-size:11px;"></i>Golden Circle</span>' +
+        '<span class="trip-chip"><i class="ti ti-music" style="font-size:11px;"></i>Bergmál</span>' +
+        '<span class="trip-chip"><i class="ti ti-droplet" style="font-size:11px;"></i>Blue Lagoon</span>' +
+        '<span class="trip-chip"><i class="ti ti-tools-kitchen-2" style="font-size:11px;"></i>Food Tour</span>' +
+      '</div>';
+    content.appendChild(cb);
   }
 
   // Trainer
-  h+='<div class="trainer-msg">'+
-    '<div class="trainer-label"><i class="ti ti-mountain"></i> Trainer Claude — Day '+currentDay+'/30'+(isWe?' · Rest &amp; recover':'')+'</div>'+
-    '<div class="trainer-body">'+(isWe?'Weekend mode: no meeting treadmill today. Use the extra time for a proper workout, a long walk, or active recovery. ':'')+MSGS[currentDay-1]+'</div>'+
-  '</div>';
+  var tm = document.createElement('div');
+  tm.className = 'trainer-msg';
+  tm.innerHTML = '<div class="trainer-label"><i class="ti ti-mountain"></i> Trainer Claude — Day '+currentDay+'/30'+(isWe?' · Rest &amp; recover':'')+'</div>' +
+    '<div class="trainer-body">'+(isWe?'Weekend mode: no meeting treadmill today. Use the extra time for a proper workout, a long walk, or active recovery. ':'')+MSGS[currentDay-1]+'</div>';
+  content.appendChild(tm);
 
   // Tabs
-  h+='<div class="tabs">'+
-    '<button class="tab'+(activeTab==='habits'?' active':'')+'" onclick="switchTab(\'habits\')">Habits</button>'+
-    '<button class="tab'+(activeTab==='iceland'?' active':'')+'" onclick="switchTab(\'iceland\')">Iceland</button>'+
-    '<button class="tab'+(activeTab==='progress'?' active':'')+'" onclick="switchTab(\'progress\')">Progress</button>'+
-    '<button class="tab'+(activeTab==='claude'?' active':'')+'" onclick="switchTab(\'claude\')">Trainer</button>'+
-  '</div>';
-
-  // HABITS TAB
-  h+='<div id="tab-habits" style="'+(activeTab!=='habits'?'display:none':'')+'">'+
-    '<div class="comp-row"><span>'+checked+' of '+total+' completed</span>'+(isWe?'<span class="we-label">Weekend schedule</span>':'')+'</div>'+
-    '<div class="card" style="margin-bottom:1rem;">'+
-      '<div class="card-title"><i class="ti ti-notes"></i> Day '+currentDay+' Notes</div>'+
-      '<textarea class="notes-area" id="dayNotes" placeholder="How are you feeling? What worked? What was hard?" onchange="saveNote(this.value)">'+esc(day.note||'')+'</textarea>'+
-      '<div class="notes-saved" id="notesSaved">Saved</div>'+
-    '</div>';
-  ['morning','midday','evening'].forEach(function(block){
-    var bh=HABITS.filter(function(x){return x.block===block;});
-    var meta=BLOCK_META[block];
-    var bc=bh.filter(function(x){if(x.weekdayOnly&&isWe)return false;return !!day.habits[x.id];}).length;
-    var bt=bh.filter(function(x){return!(x.weekdayOnly&&isWe);}).length;
-    h+='<div class="time-block '+meta.cls+'">'+
-      '<div class="tb-header"><i class="ti '+meta.icon+'" style="font-size:15px;"></i><span class="tb-label">'+meta.label+'</span><span class="tb-time">'+meta.time+'</span><span class="tb-count" id="bc-'+block+'">'+bc+'/'+bt+'</span></div>'+
-      '<div class="block-card">';
-    bh.forEach(function(hb){h+=habitRow(hb,day,isWe);});
-    h+='</div></div>';
+  var tabBar = document.createElement('div');
+  tabBar.className = 'tabs';
+  ['habits','iceland','progress','claude'].forEach(function(t) {
+    var btn = document.createElement('button');
+    btn.className = 'tab' + (activeTab === t ? ' active' : '');
+    btn.textContent = t === 'claude' ? 'Trainer' : t.charAt(0).toUpperCase() + t.slice(1);
+    btn.addEventListener('click', function() { switchTab(t); });
+    tabBar.appendChild(btn);
   });
-  // Cheat day toggle at bottom of habits tab
-  var isCheat=!!(day.cheatDay);
-  h+='<div class="cheat-day-bar">'+
-    '<div>'+
-      '<div class="cheat-day-label">'+(isCheat?'Cheat Day Active':'Cheat Day')+'</div>'+
-      '<div class="cheat-day-sub">'+(isCheat?'100% locked in — enjoy it.':'Flip to auto-complete today's checklist.')+'</div>'+
-    '</div>'+
-    '<label class="toggle-wrap">'+
-      '<input type="checkbox" '+(isCheat?'checked':'')+' onchange="toggleCheatDay()">'+
-      '<span class="toggle-slider"></span>'+
-    '</label>'+
-  '</div>';
-  h+='</div>';
+  content.appendChild(tabBar);
 
-  // ICELAND TAB
-  var tl=card.t==='trip'?'Your trip':card.t;
-  h+='<div id="tab-iceland" style="'+(activeTab!=='iceland'?'display:none':'')+'">'+
-    '<div class="iceland-card">'+
-      '<img class="iceland-img" src="'+card.img+'" alt="'+esc(card.ty)+'" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">'+
-      '<div class="iceland-placeholder"><i class="ti ti-mountain" style="font-size:48px;color:#5DCAA5;"></i></div>'+
-      '<div class="iceland-body">'+
-        '<div class="iceland-type-row"><span class="ic-type ic-'+card.t+'">'+tl+'</span><span style="font-size:11px;color:var(--text-tertiary);">Day '+currentDay+' of 30</span></div>'+
-        '<div class="iceland-title">'+esc(card.ty)+'</div>'+
-        '<div class="iceland-desc">'+card.desc+'</div>'+
-      '</div>'+
-    '</div>'+
-    '<div class="card" style="background:rgba(24,95,165,0.1);border-color:rgba(24,95,165,0.25);">'+
-      '<div style="display:flex;align-items:center;gap:10px;">'+
-        '<i class="ti ti-scale" style="font-size:22px;color:#185FA5;"></i>'+
-        '<div>'+
-          '<div style="font-size:13px;font-weight:600;color:var(--text-primary);">Weight today: '+(cw?cw+' lbs':'not logged yet')+'</div>'+
-          '<div style="font-size:12px;color:var(--text-secondary);margin-top:2px;">'+(lost>0?'-'+lost.toFixed(1)+' lbs lost · log in Progress tab':'Log your weight in the Progress tab to start tracking.')+'</div>'+
-        '</div>'+
-        '<span onclick="switchTab(\'progress\')" style="margin-left:auto;font-size:12px;color:#185FA5;cursor:pointer;font-weight:500;">Log weight</span>'+
-      '</div>'+
-    '</div>'+
-  '</div>';
+  // ── HABITS TAB ────────────────────────────────────────────────────────
+  var habitsTab = document.createElement('div');
+  habitsTab.id = 'tab-habits';
+  habitsTab.style.display = activeTab === 'habits' ? '' : 'none';
 
-  // PROGRESS TAB
-  h+='<div id="tab-progress" style="'+(activeTab!=='progress'?'display:none':'')+'">'+
-    '<div class="card">'+
-      '<div class="card-title"><i class="ti ti-scale"></i> Morning weight</div>'+
-      '<div class="weight-big"><span class="weight-num">'+(cw||'--')+'</span><span class="weight-u">lbs</span><span class="weight-goal-lbl">Goal: '+(sw?(sw-15).toFixed(1):'--')+' lbs (-15)</span></div>'+
-      '<div style="margin-bottom:10px;display:flex;align-items:center;gap:8px;">'+
-        '<input class="weight-input" type="number" step="0.1" placeholder="Enter today\'s weight" value="'+(day.weight||'')+'" onchange="setWeight(this.value)">'+
-        '<span style="font-size:13px;color:var(--text-tertiary);">lbs</span>'+
-      '</div>'+
-      '<div class="pbar-wrap"><div class="pbar-fill" style="width:'+pp.toFixed(1)+'%"></div></div>'+
-      '<div class="pbar-labels"><span>'+(lost>0?'-'+lost.toFixed(1)+' lbs lost':'Log Day 1 to begin')+'</span><span>'+pp.toFixed(0)+'% to goal</span></div>'+
-    '</div>'+
-    '<div class="card">'+
-      '<div class="card-title"><i class="ti ti-chart-line"></i> Weight journey</div>'+
-      '<div class="chart-wrap"><canvas id="wChart" aria-label="Weight chart">Weight chart.</canvas></div>'+
-      '<div class="chart-legend">'+
-        '<span><span style="width:10px;height:2px;background:#185FA5;display:inline-block;"></span>Weight</span>'+
-        '<span><span style="width:10px;height:2px;background:#1D9E75;display:inline-block;"></span>Goal</span>'+
-        '<span><span style="width:10px;height:2px;background:rgba(216,90,48,0.4);display:inline-block;"></span>Target pace</span>'+
-      '</div>'+
-    '</div>'+
-    '<div class="card">'+
-      '<div class="card-title"><i class="ti ti-calendar-stats"></i> Completion by day</div>'+
-      '<div style="position:relative;height:160px;"><canvas id="cChart" aria-label="Completion chart">Completion chart.</canvas></div>'+
-    '</div>'+
-    '<div class="card">'+
-      '<div class="card-title"><i class="ti ti-notes"></i> Daily nutrition log</div>'+
-      '<div class="input-row"><label>Calories (total)</label><input type="number" step="1" placeholder="1600" value="'+(day.nums['calories_eod']||'')+'" onchange="setNum(\'calories_eod\',this.value)"><span class="unit-lbl">kcal</span></div>'+
-      '<div class="input-row"><label>Protein (total)</label><input type="number" step="1" placeholder="165" value="'+(day.nums['protein_eod']||'')+'" onchange="setNum(\'protein_eod\',this.value)"><span class="unit-lbl">g</span></div>'+
-      '<div class="input-row"><label>Water (total)</label><input type="number" step="1" placeholder="100" value="'+(day.nums['water']||'')+'" onchange="setNum(\'water\',this.value)"><span class="unit-lbl">oz</span></div>'+
-      '<div class="input-row"><label>Sleep</label><input type="number" step="0.5" placeholder="7.5" value="'+(day.nums['sleep']||'')+'" onchange="setNum(\'sleep\',this.value)"><span class="unit-lbl">hrs</span></div>'+
-      '<div class="input-row"><label>Steps</label><input type="number" step="1" placeholder="9000" value="'+(day.nums['steps']||'')+'" onchange="setNum(\'steps\',this.value)"><span class="unit-lbl">steps</span></div>'+
-    '</div>'+
-  '</div>';
+  var compRow = document.createElement('div');
+  compRow.className = 'comp-row';
+  var compSpan = document.createElement('span');
+  compSpan.id = 'compCount';
+  compSpan.textContent = checked + ' of ' + total + ' completed';
+  compRow.appendChild(compSpan);
+  if (isWe) { var weL = document.createElement('span'); weL.className = 'we-label'; weL.textContent = 'Weekend schedule'; compRow.appendChild(weL); }
+  habitsTab.appendChild(compRow);
 
-  // TRAINER TAB
-  var statsStr='Day '+currentDay+'/30 | '+checked+'/'+total+' habits done | Weight: '+(cw?cw+' lbs':'not logged')+' | '+calcLbsLost().toFixed(1)+' lbs lost so far';
-  var prompt='Eldborg check-in — '+statsStr+' — '+MSGS[currentDay-1].substring(0,80)+'. How am I doing and what should I focus on today?';
-  var checkinUrl='https://claude.ai/new?q='+encodeURIComponent(prompt);
-  h+='<div id="tab-claude" style="'+(activeTab!=='claude'?'display:none':'')+'">'+
-    '<a class="claude-btn cb-checkin" href="'+checkinUrl+'" target="_blank">'+
-      '<div class="cb-icon"><i class="ti ti-send"></i></div>'+
-      '<div><div class="cb-title">Check in with Trainer Claude</div><div class="cb-sub">Opens Claude with today\'s stats pre-filled — '+checked+'/'+total+' done, '+calcLbsLost().toFixed(1)+' lbs lost</div></div>'+
-      '<i class="ti ti-external-link cb-arrow"></i>'+
-    '</a>'+
-    '<a class="claude-btn cb-open" href="https://claude.ai/chat/b0fa69fa-e458-4515-a070-02c7cb008fe7" target="_blank">'+
-      '<div class="cb-icon"><i class="ti ti-barbell"></i></div>'+
-      '<div><div class="cb-title">Open 01. Workout Agent</div><div class="cb-sub">Jump into your starred workout conversation</div></div>'+
-      '<i class="ti ti-external-link cb-arrow"></i>'+
-    '</a>'+
-    '<div class="claude-btn cb-coach" onclick="toggleCoach()" style="cursor:pointer;">'+
-      '<div class="cb-icon"><i class="ti ti-robot"></i></div>'+
-      '<div><div class="cb-title">In-app AI Coach</div><div class="cb-sub">Chat with Trainer Claude — knows your day\'s data</div></div>'+
-      '<i class="ti ti-chevron-down cb-arrow" id="coachChevron"></i>'+
-    '</div>'+
-    '<div class="coach-panel" id="coachPanel" style="display:none;">'+
-      '<div class="coach-header"><div class="coach-status" id="coachStatus"></div><div class="coach-header-title">Trainer Claude</div><span style="font-size:11px;color:var(--text-tertiary);">Day '+currentDay+' context loaded</span></div>'+
-      '<div class="coach-messages" id="coachMessages">'+
-        '<div class="coach-msg ai">Hæ! I\'m your Eldborg AI coach. I can see you\'ve completed '+checked+' of '+total+' habits today'+(cw?' and your weight is '+cw+' lbs':'')+'. What do you want to work through?</div>'+
-      '</div>'+
-      '<div class="coach-input-row">'+
-        '<input class="coach-input" id="coachInput" type="text" placeholder="Ask your trainer..." onkeydown="if(event.key===\'Enter\')sendCoach()">'+
-        '<button class="coach-send" id="coachSend" onclick="sendCoach()"><i class="ti ti-arrow-up"></i></button>'+
-      '</div>'+
-    '</div>'+
-  '</div>';
+  // Notes card
+  var notesCard = document.createElement('div');
+  notesCard.className = 'card';
+  notesCard.style.marginBottom = '1rem';
+  notesCard.innerHTML = '<div class="card-title"><i class="ti ti-notes"></i> Day ' + currentDay + ' Notes</div>';
+  var ta = document.createElement('textarea');
+  ta.className = 'notes-area'; ta.id = 'dayNotes';
+  ta.placeholder = 'How are you feeling? What worked? What was hard?';
+  ta.value = day.note || '';
+  ta.addEventListener('change', function() { saveNote(ta.value); });
+  var savedMsg = document.createElement('div');
+  savedMsg.className = 'notes-saved'; savedMsg.id = 'notesSaved'; savedMsg.textContent = 'Saved';
+  notesCard.appendChild(ta); notesCard.appendChild(savedMsg);
+  habitsTab.appendChild(notesCard);
 
-  document.getElementById('dayContent').innerHTML=h;
-  if(activeTab==='progress')renderCharts();
+  // Time blocks
+  ['morning','midday','evening'].forEach(function(block) {
+    var bh = HABITS.filter(function(x){ return x.block === block; });
+    var meta = BLOCK_META[block];
+    var bc = bh.filter(function(x){ if(x.weekdayOnly&&isWe)return false; return !!day.habits[x.id]; }).length;
+    var bt = bh.filter(function(x){ return !(x.weekdayOnly&&isWe); }).length;
+
+    var tb = document.createElement('div');
+    tb.className = 'time-block ' + meta.cls;
+    var tbHeader = document.createElement('div');
+    tbHeader.className = 'tb-header';
+    tbHeader.innerHTML = '<i class="ti ' + meta.icon + '" style="font-size:15px;"></i>' +
+      '<span class="tb-label">' + meta.label + '</span>' +
+      '<span class="tb-time">' + meta.time + '</span>' +
+      '<span class="tb-count" id="bc-' + block + '">' + bc + '/' + bt + '</span>';
+    var blockCard = document.createElement('div');
+    blockCard.className = 'block-card';
+    bh.forEach(function(hb) { blockCard.appendChild(buildHabitRow(hb, day, isWe)); });
+    tb.appendChild(tbHeader); tb.appendChild(blockCard);
+    habitsTab.appendChild(tb);
+  });
+
+  // Cheat day toggle
+  var cheatBar = document.createElement('div');
+  cheatBar.className = 'cheat-day-bar';
+  cheatBar.innerHTML = '<div><div class="cheat-day-label">' + (day.cheatDay?'Cheat Day Active':'Cheat Day') + '</div>' +
+    '<div class="cheat-day-sub">' + (day.cheatDay?'100% locked in — enjoy it.':'Flip to auto-complete today\'s checklist.') + '</div></div>';
+  var toggleLabel = document.createElement('label');
+  toggleLabel.className = 'toggle-wrap';
+  var toggleInput = document.createElement('input');
+  toggleInput.type = 'checkbox';
+  if (day.cheatDay) toggleInput.checked = true;
+  toggleInput.addEventListener('change', function() { toggleCheatDay(); });
+  var toggleSlider = document.createElement('span');
+  toggleSlider.className = 'toggle-slider';
+  toggleLabel.appendChild(toggleInput); toggleLabel.appendChild(toggleSlider);
+  cheatBar.appendChild(toggleLabel);
+  habitsTab.appendChild(cheatBar);
+  content.appendChild(habitsTab);
+
+  // ── ICELAND TAB ───────────────────────────────────────────────────────
+  var icelandTab = document.createElement('div');
+  icelandTab.id = 'tab-iceland';
+  icelandTab.style.display = activeTab === 'iceland' ? '' : 'none';
+
+  var icCard = document.createElement('div');
+  icCard.className = 'iceland-card';
+  var img = document.createElement('img');
+  img.className = 'iceland-img'; img.src = card.img; img.alt = card.ty;
+  img.onerror = function() { img.style.display='none'; placeholder.style.display='flex'; };
+  var placeholder = document.createElement('div');
+  placeholder.className = 'iceland-placeholder';
+  placeholder.innerHTML = '<i class="ti ti-mountain" style="font-size:48px;color:#5DCAA5;"></i>';
+  var icBody = document.createElement('div');
+  icBody.className = 'iceland-body';
+  var typeLabel = card.t === 'trip' ? 'Your trip' : card.t;
+  icBody.innerHTML = '<div class="iceland-type-row"><span class="ic-type ic-'+card.t+'">'+typeLabel+'</span><span style="font-size:11px;color:var(--text-tertiary);">Day '+currentDay+' of 30</span></div>' +
+    '<div class="iceland-title">'+card.ty+'</div><div class="iceland-desc">'+card.desc+'</div>';
+  icCard.appendChild(img); icCard.appendChild(placeholder); icCard.appendChild(icBody);
+  icelandTab.appendChild(icCard);
+
+  var weightStatusCard = document.createElement('div');
+  weightStatusCard.className = 'card';
+  weightStatusCard.style.cssText = 'background:rgba(24,95,165,0.1);border-color:rgba(24,95,165,0.25);';
+  var wsInner = document.createElement('div');
+  wsInner.style.cssText = 'display:flex;align-items:center;gap:10px;';
+  wsInner.innerHTML = '<i class="ti ti-scale" style="font-size:22px;color:#85B7EB;"></i>' +
+    '<div><div style="font-size:13px;font-weight:600;color:var(--text-primary);">Weight today: '+(cw?cw+' lbs':'not logged yet')+'</div>' +
+    '<div style="font-size:12px;color:var(--text-secondary);margin-top:2px;">'+(lost>0?'-'+lost.toFixed(1)+' lbs lost · log in Progress tab':'Log your weight in the Progress tab to start tracking.')+'</div></div>';
+  var logLink = document.createElement('span');
+  logLink.className = 'log-weight-link';
+  logLink.textContent = 'Log weight';
+  logLink.addEventListener('click', function() { switchTab('progress'); });
+  wsInner.appendChild(logLink);
+  weightStatusCard.appendChild(wsInner);
+  icelandTab.appendChild(weightStatusCard);
+  content.appendChild(icelandTab);
+
+  // ── PROGRESS TAB ──────────────────────────────────────────────────────
+  var progressTab = document.createElement('div');
+  progressTab.id = 'tab-progress';
+  progressTab.style.display = activeTab === 'progress' ? '' : 'none';
+
+  var wCard = document.createElement('div');
+  wCard.className = 'card';
+  wCard.innerHTML = '<div class="card-title"><i class="ti ti-scale"></i> Morning weight</div>' +
+    '<div class="weight-big"><span class="weight-num" id="weightDisplay">'+(cw||'--')+'</span><span class="weight-u">lbs</span><span class="weight-goal-lbl">Goal: '+(sw?(sw-15).toFixed(1):'--')+' lbs (-15)</span></div>' +
+    '<div style="margin-bottom:10px;display:flex;align-items:center;gap:8px;">' +
+      '<input class="weight-input" id="weightInput" type="number" step="0.1" placeholder="Enter today\'s weight" value="'+(day.weight||'')+'">' +
+      '<span style="font-size:13px;color:var(--text-tertiary);">lbs</span>' +
+    '</div>' +
+    '<div class="pbar-wrap"><div class="pbar-fill" id="weightPbar" style="width:'+pp.toFixed(1)+'%"></div></div>' +
+    '<div class="pbar-labels"><span id="weightLost">'+(lost>0?'-'+lost.toFixed(1)+' lbs lost':'Log Day 1 to begin')+'</span><span>'+pp.toFixed(0)+'% to goal</span></div>';
+  progressTab.appendChild(wCard);
+
+  var chartCard = document.createElement('div');
+  chartCard.className = 'card';
+  chartCard.innerHTML = '<div class="card-title"><i class="ti ti-chart-line"></i> Weight journey</div>' +
+    '<div class="chart-wrap"><canvas id="wChart" aria-label="Weight chart"></canvas></div>' +
+    '<div class="chart-legend">' +
+      '<span><span style="width:10px;height:2px;background:#185FA5;display:inline-block;"></span>Weight</span>' +
+      '<span><span style="width:10px;height:2px;background:#1D9E75;display:inline-block;"></span>Goal</span>' +
+      '<span><span style="width:10px;height:2px;background:rgba(216,90,48,0.4);display:inline-block;"></span>Target pace</span>' +
+    '</div>';
+  progressTab.appendChild(chartCard);
+
+  var compChart = document.createElement('div');
+  compChart.className = 'card';
+  compChart.innerHTML = '<div class="card-title"><i class="ti ti-calendar-stats"></i> Completion by day</div><div style="position:relative;height:160px;"><canvas id="cChart" aria-label="Completion chart"></canvas></div>';
+  progressTab.appendChild(compChart);
+
+  var nutCard = document.createElement('div');
+  nutCard.className = 'card';
+  nutCard.innerHTML = '<div class="card-title"><i class="ti ti-notes"></i> Daily nutrition log</div>' +
+    '<div class="input-row"><label>Calories (total)</label><input id="nr-calories_eod" type="number" step="1" placeholder="1600" value="'+(day.nums['calories_eod']||'')+'"><span class="unit-lbl">kcal</span></div>' +
+    '<div class="input-row"><label>Protein (total)</label><input id="nr-protein_eod" type="number" step="1" placeholder="165" value="'+(day.nums['protein_eod']||'')+'"><span class="unit-lbl">g</span></div>' +
+    '<div class="input-row"><label>Water (total)</label><input id="nr-water" type="number" step="1" placeholder="100" value="'+(day.nums['water']||'')+'"><span class="unit-lbl">oz</span></div>' +
+    '<div class="input-row"><label>Sleep</label><input id="nr-sleep" type="number" step="0.5" placeholder="7.5" value="'+(day.nums['sleep']||'')+'"><span class="unit-lbl">hrs</span></div>' +
+    '<div class="input-row"><label>Steps</label><input id="nr-steps" type="number" step="1" placeholder="9000" value="'+(day.nums['steps']||'')+'"><span class="unit-lbl">steps</span></div>';
+  progressTab.appendChild(nutCard);
+  content.appendChild(progressTab);
+
+  // ── TRAINER TAB ───────────────────────────────────────────────────────
+  var claudeTab = document.createElement('div');
+  claudeTab.id = 'tab-claude';
+  claudeTab.style.display = activeTab === 'claude' ? '' : 'none';
+
+  var statsStr = 'Day '+currentDay+'/30 | '+checked+'/'+total+' habits done | Weight: '+(cw?cw+' lbs':'not logged')+' | '+calcLbsLost().toFixed(1)+' lbs lost so far';
+  var prompt = 'Eldborg check-in — '+statsStr+' — '+MSGS[currentDay-1].substring(0,80)+'. How am I doing and what should I focus on today?';
+  var checkinUrl = 'https://claude.ai/new?q=' + encodeURIComponent(prompt);
+
+  var checkinBtn = document.createElement('a');
+  checkinBtn.className = 'claude-btn cb-checkin';
+  checkinBtn.href = checkinUrl; checkinBtn.target = '_blank';
+  checkinBtn.innerHTML = '<div class="cb-icon"><i class="ti ti-send"></i></div>' +
+    '<div><div class="cb-title">Check in with Trainer Claude</div><div class="cb-sub">Opens Claude with today\'s stats pre-filled — '+checked+'/'+total+' done, '+calcLbsLost().toFixed(1)+' lbs lost</div></div>' +
+    '<i class="ti ti-external-link cb-arrow"></i>';
+  claudeTab.appendChild(checkinBtn);
+
+  var workoutBtn = document.createElement('a');
+  workoutBtn.className = 'claude-btn cb-open';
+  workoutBtn.href = 'https://claude.ai/chat/b0fa69fa-e458-4515-a070-02c7cb008fe7'; workoutBtn.target = '_blank';
+  workoutBtn.innerHTML = '<div class="cb-icon"><i class="ti ti-barbell"></i></div>' +
+    '<div><div class="cb-title">Open 01. Workout Agent</div><div class="cb-sub">Jump into your starred workout conversation</div></div>' +
+    '<i class="ti ti-external-link cb-arrow"></i>';
+  claudeTab.appendChild(workoutBtn);
+
+  var coachBtn = document.createElement('div');
+  coachBtn.className = 'claude-btn cb-coach';
+  coachBtn.innerHTML = '<div class="cb-icon"><i class="ti ti-robot"></i></div>' +
+    '<div><div class="cb-title">In-app AI Coach</div><div class="cb-sub">Chat with Trainer Claude — knows your day\'s data</div></div>' +
+    '<i class="ti ti-chevron-down cb-arrow" id="coachChevron"></i>';
+  coachBtn.addEventListener('click', function() { toggleCoach(); });
+  claudeTab.appendChild(coachBtn);
+
+  var coachPanel = document.createElement('div');
+  coachPanel.className = 'coach-panel'; coachPanel.id = 'coachPanel'; coachPanel.style.display = 'none';
+  coachPanel.innerHTML = '<div class="coach-header"><div class="coach-status" id="coachStatus"></div><div class="coach-header-title">Trainer Claude</div><span style="font-size:11px;color:var(--text-tertiary);">Day '+currentDay+' context loaded</span></div>' +
+    '<div class="coach-messages" id="coachMessages"><div class="coach-msg ai">Hæ! I\'m your Eldborg AI coach. I can see you\'ve completed '+checked+' of '+total+' habits today'+(cw?' and your weight is '+cw+' lbs':'')+'. What do you want to work through?</div></div>' +
+    '<div class="coach-input-row"><input class="coach-input" id="coachInput" type="text" placeholder="Ask your trainer..."><button class="coach-send" id="coachSend"><i class="ti ti-arrow-up"></i></button></div>';
+  claudeTab.appendChild(coachPanel);
+  content.appendChild(claudeTab);
+
+  // Wire up weight input
+  var weightInput = document.getElementById('weightInput');
+  if (weightInput) weightInput.addEventListener('change', function() { setWeight(weightInput.value); });
+
+  // Wire up nutrition log inputs
+  ['calories_eod','protein_eod','water','sleep','steps'].forEach(function(id) {
+    var el = document.getElementById('nr-' + id);
+    if (el) el.addEventListener('change', (function(hid){ return function(e){ setNum(hid, e.target.value); }; })(id));
+  });
+
+  // Wire up coach send
+  var coachInput = document.getElementById('coachInput');
+  var coachSend = document.getElementById('coachSend');
+  if (coachInput) coachInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') sendCoach(); });
+  if (coachSend) coachSend.addEventListener('click', sendCoach);
+
+  if (activeTab === 'progress') renderCharts();
 }
 
-function renderCharts(){
-  if(wChart){wChart.destroy();wChart=null;}if(cChart){cChart.destroy();cChart=null;}
-  var isDark=window.matchMedia('(prefers-color-scheme:dark)').matches;
-  var tc=isDark?'rgba(255,255,255,0.45)':'rgba(0,0,0,0.38)';
-  var gc=isDark?'rgba(255,255,255,0.07)':'rgba(0,0,0,0.06)';
-  var wc=document.getElementById('wChart');
-  if(wc){
-    var wts=[];for(var i=0;i<30;i++)wts.push(DB[i+1]&&DB[i+1].weight?DB[i+1].weight:null);
+function switchTab(tab) {
+  activeTab = tab;
+  ['habits','iceland','progress','claude'].forEach(function(t, i) {
+    var el = document.getElementById('tab-' + t);
+    var btn = document.querySelectorAll('.tab')[i];
+    if (el) el.style.display = t === tab ? '' : 'none';
+    if (btn) btn.className = 'tab' + (t === tab ? ' active' : '');
+  });
+  if (tab === 'progress') setTimeout(renderCharts, 30);
+}
+
+function updateRingAndCounts() {
+  var day = getDay(currentDay);
+  var habits = getHabitsForDay(currentDay);
+  var total = habits.length + 1;
+  var checked = habits.filter(function(h){return day.habits[h.id];}).length + (day.weight?1:0);
+  var comp = day.cheatDay ? 100 : Math.round((checked/total)*100);
+  var circ = 2 * Math.PI * 25;
+  var arc = document.getElementById('ringArc'), pct = document.getElementById('ringPct');
+  if (arc) { arc.setAttribute('stroke-dashoffset', Math.round(circ*(1-comp/100))); arc.setAttribute('stroke', comp>=70?'#1D9E75':'#185FA5'); }
+  if (pct) pct.textContent = comp + '%';
+  var isWe = isWeekend(currentDay);
+  ['morning','midday','evening'].forEach(function(block) {
+    var bh = HABITS.filter(function(h){return h.block===block;});
+    var bc = bh.filter(function(h){if(h.weekdayOnly&&isWe)return false;return!!day.habits[h.id];}).length;
+    var bt = bh.filter(function(h){return!(h.weekdayOnly&&isWe);}).length;
+    var el = document.getElementById('bc-' + block); if(el) el.textContent = bc+'/'+bt;
+  });
+  var cc = document.getElementById('compCount');
+  if (cc) cc.textContent = checked + ' of ' + total + ' completed';
+  updateTopBar();
+}
+
+function toggleHabit(id) {
+  var day = getDay(currentDay);
+  day.habits[id] = !day.habits[id]; saveDB();
+  var chk = day.habits[id];
+  var hc = document.getElementById('hc-'+id); if(hc) hc.className = 'habit-check'+(chk?' checked':'');
+  var hn = document.getElementById('hn-'+id); if(hn) hn.className = 'habit-name'+(chk?' done':'');
+  var hi = document.getElementById('hi-'+id); if(hi) hi.setAttribute('aria-checked', chk);
+  updateRingAndCounts();
+  var ts = ['Framt! Keep going.','Þrekmaður!','The glacier grows.','Seigla in action.','One more vote cast.','Iceland is getting closer.'];
+  showToast(ts[Math.floor(Math.random()*ts.length)]);
+}
+
+function handleSlider(id, val, target, max, unit) {
+  var day = getDay(currentDay);
+  day.nums[id] = val; saveDB();
+  var wasChk = !!day.habits[id], nowChk = val >= target;
+  if (wasChk !== nowChk) { day.habits[id] = nowChk; saveDB(); var hc = document.getElementById('hc-'+id); var hn = document.getElementById('hn-'+id); if(hc) hc.className='habit-check'+(nowChk?' checked':''); if(hn) hn.className='habit-name'+(nowChk?' done':''); }
+  var fc = val >= target ? '#1D9E75' : '#85B7EB';
+  var pct = Math.min(100, Math.round((val/max)*100));
+  var sl = document.getElementById('sl-'+id); var sv = document.getElementById('sv-'+id);
+  if (sl) sl.style.background = 'linear-gradient(to right,'+fc+' '+pct+'%,var(--bg-secondary) '+pct+'%)';
+  if (sv) { sv.textContent = val+' '+unit; sv.style.color = fc; }
+  var lbls = sl && sl.parentElement && sl.parentElement.nextElementSibling;
+  if (lbls) { var spans = lbls.querySelectorAll('span'); if(spans[1]){spans[1].style.color=fc;} }
+  updateRingAndCounts();
+}
+
+function setNum(id, val) { getDay(currentDay).nums[id] = parseFloat(val)||0; saveDB(); }
+
+function setWeight(val) {
+  var v = parseFloat(val) || null;
+  getDay(currentDay).weight = v; saveDB(); updateTopBar();
+  var wd = document.getElementById('weightDisplay'); if(wd) wd.textContent = v || '--';
+}
+
+function toggleCheatDay() {
+  var day = getDay(currentDay);
+  day.cheatDay = !day.cheatDay; saveDB();
+  if (day.cheatDay) { getHabitsForDay(currentDay).forEach(function(h){day.habits[h.id]=true;}); saveDB(); showToast('Cheat day on — 100%! You still showed up.'); }
+  else { showToast('Cheat day off — back to the protocol.'); }
+  buildDayContent(); updateTopBar(); buildDayNav();
+}
+
+function saveNote(val) {
+  getDay(currentDay).note = val; saveDB();
+  var s = document.getElementById('notesSaved'); if(s){s.classList.add('show');setTimeout(function(){s.classList.remove('show');},1800);}
+}
+
+function toggleCoach() {
+  var panel = document.getElementById('coachPanel'), ch = document.getElementById('coachChevron');
+  if (!panel) return;
+  var open = panel.style.display === 'none';
+  panel.style.display = open ? '' : 'none';
+  if (ch) ch.className = 'ti '+(open?'ti-chevron-up':'ti-chevron-down')+' cb-arrow';
+  if (open) { var m = document.getElementById('coachMessages'); if(m) m.scrollTop = m.scrollHeight; }
+}
+
+function buildSys() {
+  var day = getDay(currentDay), sw = getStartWeight();
+  var habits = getHabitsForDay(currentDay);
+  var chk = habits.filter(function(h){return day.habits[h.id];});
+  var unchk = habits.filter(function(h){return !day.habits[h.id];});
+  return 'You are Trainer Claude, an elite accountability coach inside the Eldborg 30-day Iceland fat loss protocol app. ' +
+    'Today is Day '+currentDay+' of 30 ('+getDayDate(currentDay).toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'})+').' +
+    (isWeekend(currentDay)?' It is a weekend — no meeting treadmill today.':'') +
+    ' User is training for a trip to Iceland departing June 16 2026: ION Adventure Hotel, Katla glacier super jeep, Lava Show, Golden Circle, Blue Lagoon, Bergmal festival, food tour, black sand beaches.' +
+    ' Stats: weight='+(day.weight?day.weight+' lbs':'not logged')+(sw?' | start='+sw+' lbs | goal='+(sw-15).toFixed(1)+' lbs | lost='+calcLbsLost().toFixed(1)+' lbs':'')+
+    ' | done ('+chk.length+'/'+habits.length+'): '+(chk.map(function(h){return h.name;}).join(', ')||'none')+
+    (unchk.length?' | needed: '+unchk.map(function(h){return h.name;}).join(', '):' ALL DONE!')+
+    (day.note?' | note: '+day.note:'')+
+    ' | word: '+WORDS[currentDay-1].w+'. Be direct, warm, motivating. Use Icelandic words occasionally. 2-4 sentences. Reference their data.';
+}
+
+function sendCoach() {
+  var input = document.getElementById('coachInput'), send = document.getElementById('coachSend');
+  var msgs = document.getElementById('coachMessages'), status = document.getElementById('coachStatus');
+  if (!input || !msgs) return;
+  var text = input.value.trim(); if (!text) return;
+  var ud = document.createElement('div'); ud.className = 'coach-msg user'; ud.textContent = text; msgs.appendChild(ud);
+  input.value = ''; input.disabled = true; send.disabled = true;
+  var td = document.createElement('div'); td.className = 'coach-msg ai thinking'; td.id = 'thinkBubble'; td.textContent = 'Trainer Claude is thinking...'; msgs.appendChild(td);
+  msgs.scrollTop = msgs.scrollHeight; if (status) status.className = 'coach-status thinking';
+  coachHistory.push({role:'user', content:text});
+  fetch('https://api.anthropic.com/v1/messages', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({model:'claude-sonnet-4-20250514', max_tokens:1000, system:buildSys(), messages:coachHistory})})
+  .then(function(r){return r.json();}).then(function(data){
+    var tb = document.getElementById('thinkBubble'); if(tb) tb.remove();
+    var reply = (data.content&&data.content[0]&&data.content[0].text)||'Something went wrong — try again.';
+    coachHistory.push({role:'assistant',content:reply});
+    var ad = document.createElement('div'); ad.className='coach-msg ai'; ad.textContent=reply; msgs.appendChild(ad);
+    msgs.scrollTop=msgs.scrollHeight; if(status)status.className='coach-status';
+  }).catch(function(){
+    var tb=document.getElementById('thinkBubble');if(tb)tb.remove();
+    var ed=document.createElement('div');ed.className='coach-msg ai';ed.textContent='Connection error. Use the Check In button above to chat via Claude directly.';msgs.appendChild(ed);
+    if(status)status.className='coach-status';
+  }).finally(function(){input.disabled=false;send.disabled=false;input.focus();});
+}
+
+function renderCharts() {
+  if(wChart){wChart.destroy();wChart=null;} if(cChart){cChart.destroy();cChart=null;}
+  var tc='rgba(255,255,255,0.45)', gc='rgba(255,255,255,0.07)';
+  var wc = document.getElementById('wChart');
+  if (wc) {
+    var wts=[]; for(var i=0;i<30;i++) wts.push(DB[i+1]&&DB[i+1].weight?DB[i+1].weight:null);
     var sw=getStartWeight(),gl=sw-15,daily=15/30;
-    var lbs=[];for(var j=0;j<30;j++)lbs.push('D'+(j+1));
+    var lbs=[]; for(var j=0;j<30;j++) lbs.push('D'+(j+1));
     var pd=sw?(function(){var a=[];for(var k=0;k<30;k++)a.push(sw-(daily*k));return a;})():new Array(30).fill(null);
     wChart=new Chart(wc,{type:'line',data:{labels:lbs,datasets:[
-      {label:'Weight',data:wts,borderColor:'#185FA5',backgroundColor:'rgba(24,95,165,0.07)',pointRadius:wts.map(function(w){return w?3:0;}),pointBackgroundColor:'#185FA5',borderWidth:2,fill:true,tension:0.3,spanGaps:false},
+      {label:'Weight',data:wts,borderColor:'#185FA5',backgroundColor:'rgba(24,95,165,0.1)',pointRadius:wts.map(function(w){return w?3:0;}),pointBackgroundColor:'#85B7EB',borderWidth:2,fill:true,tension:0.3,spanGaps:false},
       {label:'Goal',data:new Array(30).fill(sw?gl:null),borderColor:'#1D9E75',borderDash:[6,3],pointRadius:0,borderWidth:1.5,fill:false},
       {label:'Pace',data:pd,borderColor:'rgba(216,90,48,0.4)',borderDash:[3,4],pointRadius:0,borderWidth:1,fill:false}
     ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:tc,font:{size:10},maxTicksLimit:10},grid:{color:gc}},y:{ticks:{color:tc,font:{size:10},callback:function(v){return v+'lbs';}},grid:{color:gc}}}}});
   }
   var cc=document.getElementById('cChart');
   if(cc){
-    var cs=[];for(var m=0;m<30;m++)cs.push(getDayComp(m+1));
-    var cl=[];for(var n=0;n<30;n++)cl.push('D'+(n+1));
-    cChart=new Chart(cc,{type:'bar',data:{labels:cl,datasets:[{label:'%',data:cs,backgroundColor:cs.map(function(c){return c>=70?'rgba(29,158,117,0.75)':c>0?'rgba(24,95,165,0.6)':'rgba(128,128,128,0.12)';}),borderRadius:3,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:tc,font:{size:10},maxTicksLimit:10},grid:{display:false}},y:{min:0,max:100,ticks:{color:tc,font:{size:10},callback:function(v){return v+'%';}},grid:{color:gc}}}}});
+    var cs=[]; for(var m=0;m<30;m++) cs.push(getDayComp(m+1));
+    var cl=[]; for(var n=0;n<30;n++) cl.push('D'+(n+1));
+    cChart=new Chart(cc,{type:'bar',data:{labels:cl,datasets:[{label:'%',data:cs,backgroundColor:cs.map(function(c){return c>=70?'rgba(29,158,117,0.75)':c>0?'rgba(24,95,165,0.6)':'rgba(255,255,255,0.06)';}),borderRadius:3,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:tc,font:{size:10},maxTicksLimit:10},grid:{display:false}},y:{min:0,max:100,ticks:{color:tc,font:{size:10},callback:function(v){return v+'%';}},grid:{color:gc}}}}});
   }
 }
-
-window.toggleHabit=function(id){
-  var day=getDay(currentDay);day.habits[id]=!day.habits[id];saveDB();
-  var chk=day.habits[id];
-  var hc=document.getElementById('hc-'+id);if(hc)hc.className='habit-check'+(chk?' checked':'');
-  var hn=document.getElementById('hn-'+id);if(hn)hn.className='habit-name'+(chk?' done':'');
-  var hi=document.getElementById('hi-'+id);if(hi)hi.setAttribute('aria-checked',chk);
-  var habits=getHabitsForDay(currentDay);
-  var total=habits.length+1;
-  var checked=habits.filter(function(h){return day.habits[h.id];}).length+(day.weight?1:0);
-  var comp=Math.round((checked/total)*100);
-  var circ=2*Math.PI*25;
-  var arc=document.getElementById('ringArc'),pct=document.getElementById('ringPct');
-  if(arc){arc.setAttribute('stroke-dashoffset',Math.round(circ*(1-comp/100)));arc.setAttribute('stroke',comp>=70?'#1D9E75':'#185FA5');}
-  if(pct)pct.textContent=comp+'%';
-  var isWe=isWeekend(currentDay);
-  ['morning','midday','evening'].forEach(function(block){
-    var bh=HABITS.filter(function(h){return h.block===block;});
-    var bc=bh.filter(function(h){if(h.weekdayOnly&&isWe)return false;return!!day.habits[h.id];}).length;
-    var bt=bh.filter(function(h){return!(h.weekdayOnly&&isWe);}).length;
-    var el=document.getElementById('bc-'+block);if(el)el.textContent=bc+'/'+bt;
-  });
-  var cr=document.querySelector('.comp-row span');if(cr)cr.textContent=checked+' of '+total+' completed';
-  updateTopBar();
-  var ts=['Framt! Keep going.','Þrekmaður!','The glacier grows.','Seigla in action.','One more vote cast.','Iceland is getting closer.'];
-  showToast(ts[Math.floor(Math.random()*ts.length)]);
-};
-
-window.setNum=function(id,val){getDay(currentDay).nums[id]=parseFloat(val)||0;saveDB();};
-window.setWeight=function(val){
-  var v=parseFloat(val)||null;getDay(currentDay).weight=v;saveDB();updateTopBar();
-  document.querySelectorAll('.weight-num').forEach(function(el){el.textContent=v||'--';});
-};
-window.switchTab=function(tab){
-  activeTab=tab;
-  ['habits','iceland','progress','claude'].forEach(function(t,i){
-    var el=document.getElementById('tab-'+t);
-    var btn=document.querySelectorAll('.tab')[i];
-    if(el)el.style.display=t===tab?'':'none';
-    if(btn)btn.className='tab'+(t===tab?' active':'');
-  });
-  if(tab==='progress')setTimeout(renderCharts,30);
-};
-window.saveNote=function(val){
-  var day=getDay(currentDay);day.note=val;saveDB();
-  var s=document.getElementById('notesSaved');if(s){s.classList.add('show');setTimeout(function(){s.classList.remove('show');},1800);}
-};
-window.toggleCoach=function(){
-  var panel=document.getElementById('coachPanel'),ch=document.getElementById('coachChevron');
-  if(!panel)return;
-  var open=panel.style.display==='none';
-  panel.style.display=open?'':'none';
-  if(ch)ch.className='ti '+(open?'ti-chevron-up':'ti-chevron-down')+' cb-arrow';
-  if(open){var m=document.getElementById('coachMessages');if(m)m.scrollTop=m.scrollHeight;}
-};
-function buildSys(){
-  var day=getDay(currentDay),sw=getStartWeight();
-  var habits=getHabitsForDay(currentDay);
-  var chk=habits.filter(function(h){return day.habits[h.id];});
-  var unchk=habits.filter(function(h){return!day.habits[h.id];});
-  return 'You are Trainer Claude, an elite accountability coach inside the Eldborg 30-day Iceland fat loss protocol app. '+
-    'Today is Day '+currentDay+' of 30 ('+getDayDate(currentDay).toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'})+').'+
-    (isWeekend(currentDay)?' It is a weekend — no meeting treadmill today.':'')+
-    ' User is training for a trip to Iceland departing June 16 2026: ION Adventure Hotel, Katla glacier super jeep, Lava Show, Golden Circle, Blue Lagoon, Bergmal festival, food tour, black sand beaches.'+
-    ' Stats: weight='+(day.weight?day.weight+' lbs':'not logged')+(sw?' | start='+sw+' lbs | goal='+(sw-15).toFixed(1)+' lbs | lost='+calcLbsLost().toFixed(1)+' lbs':'')+
-    ' | done ('+chk.length+'/'+habits.length+'): '+(chk.map(function(h){return h.name;}).join(', ')||'none')+
-    (unchk.length?' | needed: '+unchk.map(function(h){return h.name;}).join(', '):' ALL DONE!')+
-    (day.note?' | note: '+day.note:'')+
-    ' | word: '+WORDS[currentDay-1].w+'.'+
-    ' Be direct, warm, motivating. Use Icelandic words occasionally. 2-4 sentences max. Reference their data.';
-}
-window.sendCoach=function(){
-  var input=document.getElementById('coachInput'),send=document.getElementById('coachSend');
-  var msgs=document.getElementById('coachMessages'),status=document.getElementById('coachStatus');
-  if(!input||!msgs)return;
-  var text=input.value.trim();if(!text)return;
-  var ud=document.createElement('div');ud.className='coach-msg user';ud.textContent=text;msgs.appendChild(ud);
-  input.value='';input.disabled=true;send.disabled=true;
-  var td=document.createElement('div');td.className='coach-msg ai thinking';td.id='thinkBubble';td.textContent='Trainer Claude is thinking...';msgs.appendChild(td);
-  msgs.scrollTop=msgs.scrollHeight;if(status)status.className='coach-status thinking';
-  coachHistory.push({role:'user',content:text});
-  fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:buildSys(),messages:coachHistory})})
-  .then(function(r){return r.json();}).then(function(data){
-    var tb=document.getElementById('thinkBubble');if(tb)tb.remove();
-    var reply=(data.content&&data.content[0]&&data.content[0].text)||'Something went wrong — try again.';
-    coachHistory.push({role:'assistant',content:reply});
-    var ad=document.createElement('div');ad.className='coach-msg ai';ad.textContent=reply;msgs.appendChild(ad);
-    msgs.scrollTop=msgs.scrollHeight;if(status)status.className='coach-status';
-  }).catch(function(){
-    var tb=document.getElementById('thinkBubble');if(tb)tb.remove();
-    var ed=document.createElement('div');ed.className='coach-msg ai';ed.textContent='Connection error. Use the Check In button above to chat via Claude directly.';msgs.appendChild(ed);
-    if(status)status.className='coach-status';
-  }).finally(function(){input.disabled=false;send.disabled=false;input.focus();});
-};
 
 var toastTimer;
-function showToast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(function(){t.classList.remove('show');},2200);}
-
-window.updateSlider=function(id,val,target){
-  val=parseFloat(val)||0;
-  var day=getDay(currentDay);
-  day.nums[id]=val;
-  saveDB();
-  // auto-check habit when target reached, uncheck if below
-  var wasChecked=!!day.habits[id];
-  var nowChecked=val>=target;
-  if(wasChecked!==nowChecked){
-    day.habits[id]=nowChecked;
-    saveDB();
-    var hc=document.getElementById('hc-'+id);
-    var hn=document.getElementById('hn-'+id);
-    if(hc)hc.className='habit-check'+(nowChecked?' checked':'');
-    if(hn)hn.className='habit-name'+(nowChecked?' done':'');
-  }
-  // update slider fill color and value display
-  var sl=document.getElementById('sl-'+id);
-  var sv=document.getElementById('sv-'+id);
-  var fc=val>=target?'#1D9E75':'#185FA5';
-  var pct=Math.min(100,Math.round((val/(parseFloat(sl&&sl.max)||100))*100));
-  if(sl)sl.style.background='linear-gradient(to right,'+fc+' '+pct+'%,var(--bg-secondary) '+pct+'%)';
-  if(sv)sv.textContent=val+' '+(id==='water'?'oz':'g');
-  if(sv)sv.style.color=fc;
-  // update ring and counts
-  var habits=getHabitsForDay(currentDay);
-  var total=habits.length+1;
-  var checked=habits.filter(function(h){return day.habits[h.id];}).length+(day.weight?1:0);
-  var comp=Math.round((checked/total)*100);
-  var circ=2*Math.PI*25;
-  var arc=document.getElementById('ringArc'),pctEl=document.getElementById('ringPct');
-  if(arc){arc.setAttribute('stroke-dashoffset',Math.round(circ*(1-comp/100)));arc.setAttribute('stroke',comp>=70?'#1D9E75':'#185FA5');}
-  if(pctEl)pctEl.textContent=comp+'%';
-  var isWe=isWeekend(currentDay);
-  ['morning','midday','evening'].forEach(function(block){
-    var bh=HABITS.filter(function(h){return h.block===block;});
-    var bc=bh.filter(function(h){if(h.weekdayOnly&&isWe)return false;return!!day.habits[h.id];}).length;
-    var bt=bh.filter(function(h){return!(h.weekdayOnly&&isWe);}).length;
-    var el=document.getElementById('bc-'+block);if(el)el.textContent=bc+'/'+bt;
-  });
-  var cr=document.querySelector('.comp-row span');
-  if(cr)cr.textContent=checked+' of '+total+' completed';
-  updateTopBar();
-};
-
-window.toggleCheatDay=function(){
-  var day=getDay(currentDay);
-  day.cheatDay=!day.cheatDay;
-  saveDB();
-  if(day.cheatDay){
-    // check every habit for today
-    getHabitsForDay(currentDay).forEach(function(h){day.habits[h.id]=true;});
-    day.weight=day.weight||null; // keep weight as-is
-    saveDB();
-    showToast('Cheat day on — 100%! You still showed up.');
-  } else {
-    showToast('Cheat day off — back to the protocol.');
-  }
-  buildDayContent();
-  updateTopBar();
-  buildDayNav();
-};
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function(){t.classList.remove('show');}, 2200);
+}
 
 loadDB();
-var today=new Date();today.setHours(0,0,0,0);
-var diff=Math.floor((today-START_DATE)/86400000);
-currentDay=Math.min(30,Math.max(1,diff+1));
-updateTopBar();buildDayNav();buildDayContent();
+var today = new Date(); today.setHours(0,0,0,0);
+var diff = Math.floor((today - START_DATE) / 86400000);
+currentDay = Math.min(30, Math.max(1, diff + 1));
+updateTopBar(); buildDayNav(); buildDayContent();
 setTimeout(function(){var a=document.querySelector('.day-pill.active');if(a)a.scrollIntoView({block:'nearest',inline:'center',behavior:'smooth'});},120);
 </script>
 </body>
